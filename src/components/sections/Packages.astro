@@ -1,0 +1,120 @@
+---
+interface PackageOption {
+  id: "basico" | "completo" | "premium";
+  index: string;
+  name: string;
+  cta: string;
+  tag?: string;
+  includes: string[];
+}
+
+const packages: PackageOption[] = [
+  {
+    id: "basico",
+    index: "Plan 01",
+    name: "Básico",
+    cta: "Cotizar Básico",
+    includes: [
+      "Renta",
+      "Carpa",
+      "Mobiliario",
+      "Loza",
+      "Banquete 2 tiempos",
+      "Servicio de meseros",
+    ],
+  },
+  {
+    id: "completo",
+    index: "Plan 02",
+    name: "Completo",
+    cta: "Cotizar Completo",
+    includes: [
+      "Renta",
+      "Carpa",
+      "Mobiliario",
+      "Loza",
+      "Servicio de meseros",
+      "Banquete 2 tiempos o a elegir",
+      "DJ",
+      "Mezcladores",
+    ],
+  },
+  {
+    id: "premium",
+    index: "Plan 03",
+    name: "Premium",
+    cta: "Cotizar Premium",
+    tag: "Más completo",
+    includes: [
+      "Renta",
+      "Mobiliario",
+      "Carpa",
+      "Loza",
+      "Servicio de meseros",
+      "Banquete 3 tiempos o a elegir",
+      "DJ",
+      "Flores",
+      "Mezcladores y hielo",
+      "Pista",
+    ],
+  },
+];
+---
+
+<section id="paquetes" class="section section--sand packages" aria-labelledby="packages-title">
+  <div class="shell">
+    <header class="packages__header" data-reveal>
+      <p class="eyebrow">Paquetes · 03 opciones</p>
+      <h2 id="packages-title" class="section-heading packages__title">
+        Nuestros <em>paquetes</em>
+      </h2>
+      <p class="section-lead packages__lead">
+        Tres maneras de armar tu celebración, de lo esencial a lo completo.
+      </p>
+    </header>
+
+    <div class="packages__grid" data-reveal>
+      {
+        packages.map((option) => (
+          <article class="packages__item" aria-labelledby={`package-${option.id}-name`}>
+            <p class="index-number packages__index" aria-hidden="true">
+              {option.index}
+            </p>
+
+            <div class="packages__name-row">
+              <h3 id={`package-${option.id}-name`} class="packages__name">
+                {option.name}
+              </h3>
+              {option.tag && <p class="packages__tag">{option.tag}</p>}
+            </div>
+
+            <ul
+              class="checklist packages__list"
+              role="list"
+              aria-label={`Incluye el paquete ${option.name}`}
+            >
+              {option.includes.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+
+            <div class="packages__cta">
+              <a
+                class="button button--primary"
+                href="#cotiza"
+                data-quote-package={option.id}
+              >
+                {option.cta}
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="note packages__note">
+      La disponibilidad y los servicios se definen en cada cotización. Aplican términos y
+      condiciones.
+    </p>
+  </div>
+</section>

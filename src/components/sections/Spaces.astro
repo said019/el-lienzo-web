@@ -1,0 +1,225 @@
+---
+import { Image } from 'astro:assets';
+import { buildZoomGroup, type ZoomAttributes } from '../../lib/zoom';
+
+import terrazasLead from '../../assets/spaces/cierre-palmeras-noche.webp';
+import terrazasJardin from '../../assets/spaces/jardin-palmeras-dia.webp';
+import terrazasCarpa from '../../assets/spaces/mailing-footer.webp';
+
+import establosLead from '../../assets/spaces/mailing-establos.webp';
+import establosPasillo from '../../assets/spaces/establos.webp';
+import establosMesa from '../../assets/gallery/establos-mesa-azul.webp';
+
+import salonLead from '../../assets/spaces/salon.webp';
+import salonVentanales from '../../assets/spaces/mailing-salon.webp';
+import salonMesa from '../../assets/gallery/salon-mesa.webp';
+
+import ruedoLead from '../../assets/spaces/ruedo.webp';
+import ruedoExplanada from '../../assets/spaces/terrazas.webp';
+import ruedoBarda from '../../assets/gallery/jardines-general.webp';
+
+interface SpacePhoto {
+  src: ImageMetadata;
+  alt: string;
+}
+
+interface SpaceRecord {
+  slug: string;
+  number: string;
+  name: string;
+  lead: string;
+  description: string;
+  features: string[];
+  /* Cada espacio lleva siempre tres fotos: la grande y las dos apiladas. */
+  photos: [SpacePhoto, SpacePhoto, SpacePhoto];
+}
+
+const spaces: SpaceRecord[] = [
+  {
+    slug: 'terrazas',
+    number: '01',
+    name: 'Terrazas',
+    lead: 'El jardín para celebrar a lo grande.',
+    description:
+      'Tres amplios jardines con una vista privilegiada del campo. Un espacio abierto y versátil que se adapta desde una celebración íntima hasta un gran evento al aire libre.',
+    features: [
+      'Capacidad de hasta 450 pax.',
+      'Al aire libre',
+      'Alta flexibilidad de montaje',
+    ],
+    photos: [
+      { src: terrazasLead, alt: 'Banquete al anochecer entre las palmeras, con mesas largas, velas y series de luces' },
+      { src: terrazasJardin, alt: 'Los jardines de las Terrazas en un día despejado, con palmeras y escalinata' },
+      { src: terrazasCarpa, alt: 'La carpa de las Terrazas iluminada al caer la tarde' },
+    ],
+  },
+  {
+    slug: 'establos',
+    number: '02',
+    name: 'Establos',
+    lead: 'Un rincón resguardado para celebrar de cerca.',
+    description:
+      'Un espacio con techo y mucha personalidad, ideal para celebraciones más cercanas donde todos caben en la misma mesa.',
+    features: [
+      'Capacidad de hasta 80 pax.',
+      'Espacio techado',
+      'Ideal para celebraciones íntimas',
+    ],
+    photos: [
+      { src: establosLead, alt: 'Mesa larga con flores blancas a lo largo del pasillo empedrado de los Establos' },
+      { src: establosPasillo, alt: 'El pasillo de los Establos con su mesa lista entre los arcos de ladrillo' },
+      { src: establosMesa, alt: 'Mesas largas bajo el techo de los Establos, con cristalería en tonos azules' },
+    ],
+  },
+  {
+    slug: 'salon',
+    number: '03',
+    name: 'Salón',
+    lead: 'Lo íntimo y lo privado, puertas adentro.',
+    description:
+      'Nuestro espacio más pequeño y privado, pensado para comidas, juntas y reuniones corporativas que piden concentración y calma.',
+    features: [
+      'Capacidad de hasta 50 pax.',
+      'Interior privado',
+      'Comidas y juntas corporativas',
+    ],
+    photos: [
+      { src: salonLead, alt: 'El Salón con luz de día, mesa montada y servicio de charcutería' },
+      { src: salonVentanales, alt: 'El Salón con sus ventanales, mesas de madera y luz cálida' },
+      { src: salonMesa, alt: 'Mesa del Salón puesta con flores rojas junto a los ventanales' },
+    ],
+  },
+  {
+    slug: 'ruedo',
+    number: '04',
+    name: 'Ruedo',
+    lead: 'El corazón de El Lienzo, abierto a cualquier idea.',
+    description:
+      'Un antiguo ruedo charro convertido en nuestro espacio más grande y versátil. Aquí caben los montajes de gran formato sin perder el carácter del lugar.',
+    features: [
+      'Capacidad de hasta 1000 pax.',
+      'Nuestro espacio más grande',
+      'Montajes de gran formato',
+    ],
+    photos: [
+      { src: ruedoLead, alt: 'El antiguo Ruedo de noche, con pista circular al centro, velas y mesas alrededor' },
+      { src: ruedoExplanada, alt: 'La explanada verde del Ruedo en un día despejado' },
+      { src: ruedoBarda, alt: 'El andador de ladrillo junto al Ruedo, entre jardines' },
+    ],
+  },
+];
+
+/* Cada espacio es su propio recorrido dentro del visor: tres fotos por bloque. */
+const spacesWithZoom = await Promise.all(
+  spaces.map(async (space) => ({
+    space,
+    zoom: (
+      await buildZoomGroup(
+        space.photos.map((photo) => ({
+          src: photo.src,
+          alt: photo.alt,
+          caption: space.name,
+        })),
+        `espacio-${space.slug}`,
+      )
+    ).map((entry) => entry.zoom) as [ZoomAttributes, ZoomAttributes, ZoomAttributes],
+  })),
+);
+
+const leadSizes =
+  '(max-width: 47.99rem) calc(100vw - 2rem), (max-width: 63.99rem) 58vw, 36vw';
+const stackSizes =
+  '(max-width: 47.99rem) calc(50vw - 1.5rem), (max-width: 63.99rem) 34vw, 21vw';
+---
+
+<section id="espacios" class="section section--paper spaces" aria-labelledby="spaces-title">
+  <div class="shell">
+    <header class="spaces__header">
+      <p class="eyebrow">Espacios para celebrar · 04 espacios</p>
+      <h2 id="spaces-title" class="section-heading">Conoce cada <em>espacio</em></h2>
+    </header>
+
+    <div class="spaces__list">
+      {
+        spacesWithZoom.map(({ space, zoom }, index) => (
+          <article
+            id={`espacio-${space.slug}`}
+            class:list={['spaces__item', index % 2 === 1 && 'spaces__item--reverse']}
+            aria-labelledby={`${space.slug}-title`}
+          >
+            <header class="spaces__title">
+              <p class="index-number" aria-hidden="true">{space.number}</p>
+              <h3 id={`${space.slug}-title`} class="spaces__name">{space.name}</h3>
+            </header>
+
+            <div class="spaces__gallery">
+              <figure class="spaces__figure spaces__figure--lead">
+                <button class="zoom" type="button" disabled {...zoom[0]}>
+                  <Image
+                    class="spaces__image"
+                    src={space.photos[0].src}
+                    alt={space.photos[0].alt}
+                    loading="lazy"
+                    decoding="async"
+                    widths={[480, 768, 1200]}
+                    sizes={leadSizes}
+                  />
+                  <span class="sr-only"> (ampliar)</span>
+                </button>
+              </figure>
+              <figure class="spaces__figure spaces__figure--a">
+                <button class="zoom" type="button" disabled {...zoom[1]}>
+                  <Image
+                    class="spaces__image"
+                    src={space.photos[1].src}
+                    alt={space.photos[1].alt}
+                    loading="lazy"
+                    decoding="async"
+                    widths={[320, 480, 768]}
+                    sizes={stackSizes}
+                  />
+                  <span class="sr-only"> (ampliar)</span>
+                </button>
+              </figure>
+              <figure class="spaces__figure spaces__figure--b">
+                <button class="zoom" type="button" disabled {...zoom[2]}>
+                  <Image
+                    class="spaces__image"
+                    src={space.photos[2].src}
+                    alt={space.photos[2].alt}
+                    loading="lazy"
+                    decoding="async"
+                    widths={[320, 480, 768]}
+                    sizes={stackSizes}
+                  />
+                  <span class="sr-only"> (ampliar)</span>
+                </button>
+              </figure>
+            </div>
+
+            <div class="spaces__content">
+              <p class="section-lead spaces__lead">{space.lead}</p>
+              <p class="prose spaces__description">{space.description}</p>
+              <ul class="checklist spaces__features">
+                {space.features.map((feature) => (
+                  <li>{feature}</li>
+                ))}
+              </ul>
+              <a
+                class="button button--primary spaces__action"
+                href="#cotiza"
+                data-quote-space={space.slug}
+              >
+                Cotizar {space.name}
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="note spaces__note">
+      Capacidades y montajes pueden variar dependiendo el tipo de evento y sus necesidades.
+    </p>
+  </div>
+</section>

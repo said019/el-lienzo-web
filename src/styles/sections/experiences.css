@@ -1,0 +1,116 @@
+
+
+.experiences {
+  /* Deja aire bajo el header fijo cuando se llega por el ancla #experiencias */
+  scroll-margin-top: 5.5rem;
+  padding-block: clamp(var(--space-4xl), 9vw, 9rem);
+  background: var(--color-sand);
+  color: var(--color-ink);
+}
+
+.experiences__inner {
+  display: grid;
+  gap: clamp(var(--space-2xl), 5vw, var(--space-4xl));
+}
+
+/* ------------------------------ Encabezado ------------------------------ */
+
+.experiences__header {
+  text-align: center;
+}
+
+.experiences__header .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+.experiences__title {
+  /* Más ancho que el .section-heading base: el título es largo y va centrado */
+  max-width: 24ch;
+  margin-inline: auto;
+  margin-bottom: 0;
+}
+
+/* --------------------------- Banda fotográfica --------------------------- */
+
+
+
+
+
+/* ------------------------------ Categorías ------------------------------ */
+
+.experiences__categories {
+  display: grid;
+  border-top: 0.0625rem solid var(--color-line);
+  border-bottom: 0.0625rem solid var(--color-line);
+}
+
+.experiences__category {
+  min-width: 0;
+  padding-block: clamp(var(--space-lg), 3vw, var(--space-2xl));
+}
+
+/* Móvil: se apilan y el filete entre ellas es horizontal */
+.experiences__category + .experiences__category {
+  border-top: 0.0625rem solid var(--color-line);
+}
+
+.experiences__category-title {
+  margin-bottom: var(--space-lg);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.1;
+}
+
+.experiences__list {
+  margin-bottom: 0;
+  color: var(--color-ink-soft);
+}
+
+/* -------------------------------- Cierre -------------------------------- */
+
+.experiences__closing {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.experiences__question {
+  max-width: 32ch;
+  margin: 0;
+  color: var(--color-ink-deep);
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.experiences__answer {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--color-ink-soft);
+}
+
+.experiences__action {
+  margin-top: var(--space-sm);
+}
+
+/* ------------------------------ Responsive ------------------------------ */
+
+@media (min-width: 62rem) {
+  .experiences__categories {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Escritorio: el filete entre columnas es vertical, no horizontal */
+  .experiences__category + .experiences__category {
+    border-top: 0;
+    border-left: 0.0625rem solid var(--color-line);
+    padding-left: clamp(var(--space-xl), 3.5vw, var(--space-3xl));
+  }
+
+  .experiences__category:not(:last-child) {
+    padding-right: clamp(var(--space-xl), 3.5vw, var(--space-3xl));
+  }
+}

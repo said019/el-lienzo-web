@@ -1,0 +1,75 @@
+---
+import { WHATSAPP_BASE_URL } from '../../lib/whatsapp';
+
+const ideaMessage =
+  'Hola, equipo de El Lienzo. Tengo una idea diferente para mi evento y me gustaría contársela.';
+const ideaUrl = `${WHATSAPP_BASE_URL}?text=${encodeURIComponent(ideaMessage)}`;
+
+const categories = [
+  {
+    id: 'celebraciones',
+    name: 'Celebraciones',
+    events: ['Bodas', 'XV años', 'Bautizos', 'Primeras comuniones', 'Cumpleaños'],
+  },
+  {
+    id: 'familia',
+    name: 'Familia',
+    events: ['Eventos infantiles', 'Reuniones', 'Aniversarios', 'Celebraciones especiales'],
+  },
+  {
+    id: 'corporativo',
+    name: 'Corporativo',
+    events: [
+      'Comidas',
+      'Conferencias',
+      'Presentaciones',
+      'Integraciones',
+      'Eventos empresariales',
+    ],
+  },
+];
+---
+
+<section id="experiencias" class="experiences" aria-labelledby="experiences-title">
+  <div class="shell experiences__inner">
+    <header class="experiences__header">
+      <p class="eyebrow">Todo lo que podemos celebrar</p>
+      <h2 id="experiences-title" class="section-heading experiences__title">
+        Podemos ayudarte a volver realidad cualquier evento que puedas <em>imaginar</em>
+      </h2>
+    </header>
+
+    <div class="experiences__categories">
+      {
+        categories.map((category) => (
+          <section class="experiences__category" aria-labelledby={`experience-${category.id}`}>
+            <h3 id={`experience-${category.id}`} class="experiences__category-title">
+              {category.name}
+            </h3>
+            <ul class="checklist experiences__list" role="list">
+              {category.events.map((event) => (
+                <li>{event}</li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="experiences__closing">
+      <p class="experiences__question">¿Tienes algo diferente en mente?</p>
+      <p class="experiences__answer">
+        Cuéntanos tu idea. Nos encanta encontrar la manera de hacerla realidad.
+      </p>
+      <a
+        class="button button--primary experiences__action"
+        href={ideaUrl}
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Cuéntanos tu idea por WhatsApp"
+      >
+        Cuéntanos tu idea
+      </a>
+    </div>
+  </div>
+</section>

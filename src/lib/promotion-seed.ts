@@ -1,0 +1,30 @@
+import { storedPromotionsSchema } from "./promotion-schema";
+
+export const DEFAULT_PROMOTIONS = storedPromotionsSchema.parse([
+  {
+    id: "visitas",
+    revision: 4,
+    enabled: true,
+    priority: 10,
+    startsAt: "2026-08-31T00:00:00-06:00",
+    endsAt: "2026-11-01T00:00:00-06:00",
+    eyebrow: "Oferta especial",
+    title: "Obtén un 10% de descuento de renta",
+    body:
+      "Cerrando tu evento antes de noviembre del 2026.\n\n" +
+      "Y elige entre:\n" +
+      "Mini domo personalizado de Charcutería. Con el logo de tu empresa o identidad de tu evento.\n\n" +
+      "Barra de Clericot. Para disfrutar y brindar con tus invitados.",
+    note:
+      "Promoción válida del 1 de septiembre al 31 de octubre del 2026. Consulta términos y condiciones.",
+    image: {
+      src: "/images/promotions/cierre-2026.webp",
+      alt: "Jarra y vaso de clericot con cítricos y frutos rojos",
+      width: 900,
+      height: 506,
+    },
+    cta: { label: "Cotiza tu evento", href: "#cotiza" },
+    trigger: { mode: "either", delayMs: 8000, scrollPercent: 35 },
+    tone: "canvas",
+  },
+]);

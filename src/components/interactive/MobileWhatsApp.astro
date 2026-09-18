@@ -1,0 +1,67 @@
+---
+import { WHATSAPP_BASE_URL } from "../../lib/whatsapp";
+
+const message = "Hola, equipo de El Lienzo. Me gustaría cotizar un evento.";
+const whatsappUrl = new URL(WHATSAPP_BASE_URL);
+whatsappUrl.searchParams.set("text", message);
+---
+
+<a
+  class="mobile-whatsapp"
+  href={whatsappUrl.toString()}
+  target="_blank"
+  rel="noreferrer noopener"
+  aria-label="Cotizar por WhatsApp"
+  data-mobile-whatsapp
+  data-tucked="false"
+>
+  <svg
+    class="mobile-whatsapp__icon"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M20.5 11.7a8.3 8.3 0 0 1-12.2 7.4L4 20.2l1.1-4.1A8.3 8.3 0 1 1 20.5 11.7Zm-8.3-6.6a6.6 6.6 0 0 0-5.7 10l.2.4-.6 2.3 2.4-.6.4.2a6.6 6.6 0 1 0 3.3-12.3Zm3.8 9.2c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1l-.7.8c-.1.2-.3.2-.5.1a5.4 5.4 0 0 1-1.6-1 6 6 0 0 1-1.1-1.4c-.1-.2 0-.4.1-.5l.4-.5.2-.4c.1-.1 0-.3 0-.4l-.7-1.6c-.2-.4-.4-.4-.5-.4h-.4c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9 0 1.1.8 2.2.9 2.3.1.2 1.6 2.5 4 3.4.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.3-.5 1.5-1 .2-.5.2-1 .2-1.1-.1-.1-.2-.2-.4-.3Z"
+      fill="currentColor"
+    />
+  </svg>
+  <span class="mobile-whatsapp__label">WhatsApp</span>
+</a>
+
+<script>
+  // El botón flotante se retira cuando el formulario de cotización o el pie
+  // entran en pantalla: ahí ya hay un botón de envío y no debe taparse.
+  const TUCK_ZONES = "#cotiza, footer";
+
+  function setupMobileWhatsApp(): void {
+    const button = document.querySelector<HTMLElement>("[data-mobile-whatsapp]");
+    if (!button || button.dataset.mobileWhatsappReady === "true") return;
+
+    const zones = document.querySelectorAll(TUCK_ZONES);
+    if (zones.length === 0 || !("IntersectionObserver" in window)) return;
+
+    button.dataset.mobileWhatsappReady = "true";
+    const onScreen = new Set<Element>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) onScreen.add(entry.target);
+          else onScreen.delete(entry.target);
+        }
+        button.dataset.tucked = onScreen.size > 0 ? "true" : "false";
+      },
+      // Sólo cuenta cuando la zona rebasa el cuarto inferior de la pantalla.
+      { rootMargin: "0px 0px -25% 0px" },
+    );
+
+    zones.forEach((zone) => observer.observe(zone));
+    document.addEventListener("astro:before-swap", () => observer.disconnect(), {
+      once: true,
+    });
+  }
+
+  setupMobileWhatsApp();
+  document.addEventListener("astro:page-load", () => setupMobileWhatsApp());
+</script>

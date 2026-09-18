@@ -1,0 +1,148 @@
+/* ------------------------------------------------------------------
+   Paquetes · retícula horizontal con encabezado centrado, tres columnas
+   separadas por filetes de 1px y sin sombras. Se apilan en móvil.
+   ------------------------------------------------------------------ */
+
+.packages {
+  /* Compensa el encabezado fijo al llegar desde el menú */
+  scroll-margin-top: 5.5rem;
+}
+
+/* -------------------------------- Encabezado -------------------------------- */
+
+.packages__header {
+  max-width: 46rem;
+  margin-inline: auto;
+  margin-bottom: clamp(2.75rem, 6vw, 4.5rem);
+  text-align: center;
+}
+
+.packages__title {
+  max-width: none;
+  margin-inline: auto;
+}
+
+.packages__lead {
+  margin-inline: auto;
+  margin-bottom: 0;
+}
+
+/* --------------------------------- Retícula --------------------------------- */
+
+.packages__grid {
+  display: grid;
+  row-gap: clamp(2.25rem, 4vw, 3rem);
+}
+
+.packages__item {
+  /* Columna en flex para poder empujar el botón al fondo */
+  display: flex;
+  flex-direction: column;
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: clamp(1.5rem, 2.6vw, 2rem);
+}
+
+.packages__index {
+  margin: 0 0 var(--space-xs);
+}
+
+.packages__name-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-sm) var(--space-md);
+  margin-bottom: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+
+.packages__name {
+  max-width: none;
+  margin: 0;
+  font-size: var(--text-heading);
+}
+
+/* Distintivo del paquete más completo: sólo texto y un filete, sin insignia flotante */
+.packages__tag {
+  margin: 0;
+  border: 0.0625rem solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.6rem;
+  color: var(--color-ink-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.packages__list {
+  margin: 0;
+}
+
+.packages__list li {
+  color: var(--color-ink);
+}
+
+.packages__cta {
+  /* Alinea los tres botones al fondo aunque las listas midan distinto */
+  margin-top: auto;
+  padding-top: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.packages__cta .button {
+  width: 100%;
+  max-width: 24rem;
+}
+
+/* ----------------------------------- Pie ----------------------------------- */
+
+.packages__note {
+  max-width: 52ch;
+  margin: clamp(2.5rem, 5vw, 3.5rem) auto 0;
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: var(--space-lg);
+  text-align: center;
+}
+
+/* ---------------------------- Tablet: dos columnas --------------------------- */
+
+@media (min-width: 48rem) and (max-width: 61.99rem) {
+  .packages__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .packages__item {
+    padding-inline: clamp(1.25rem, 2.4vw, 2rem);
+  }
+
+  .packages__item:nth-child(odd) {
+    padding-inline-start: 0;
+  }
+
+  .packages__item:nth-child(even) {
+    border-inline-start: 0.0625rem solid var(--color-line);
+    padding-inline-end: 0;
+  }
+}
+
+/* --------------------------- Escritorio: tres columnas ------------------------ */
+
+@media (min-width: 62rem) {
+  .packages__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .packages__item {
+    border-inline-start: 0.0625rem solid var(--color-line);
+    padding-inline: clamp(1.5rem, 2.8vw, 2.5rem);
+  }
+
+  .packages__item:first-child {
+    border-inline-start: 0;
+    padding-inline-start: 0;
+  }
+
+  .packages__item:last-child {
+    padding-inline-end: 0;
+  }
+}

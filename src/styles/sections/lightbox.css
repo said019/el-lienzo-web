@@ -1,0 +1,208 @@
+/*
+  Visor de imagen ampliada. Es el segundo y último elemento del sitio que se levanta
+  sobre la página, así que comparte el velo y la sombra del diálogo de campaña.
+*/
+
+.lightbox {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  border: 0;
+  padding: 0;
+  /* Fondo sólido, no sólo ::backdrop: así el contraste del pie es real y
+     verificable, y la foto nunca compite con la página de atrás. */
+  background: #0c1210;
+  color: var(--color-paper);
+  overscroll-behavior: contain;
+}
+
+.lightbox:not([open]) {
+  display: none;
+}
+
+.lightbox[open] {
+  display: grid;
+  place-items: center;
+}
+
+.lightbox::backdrop {
+  background: #0c1210;
+}
+
+.lightbox__figure {
+  display: grid;
+  max-width: min(100%, 84rem);
+  max-height: 100%;
+  align-content: center;
+  justify-items: center;
+  margin: 0;
+  padding: clamp(var(--space-lg), 4vw, var(--space-3xl));
+  gap: var(--space-md);
+}
+
+.lightbox__image {
+  width: auto;
+  max-width: 100%;
+  /* Deja aire para la barra de pie y los controles superiores. */
+  max-height: calc(100dvh - 9rem);
+  height: auto;
+  border-radius: var(--radius-sm);
+  background: rgb(255 255 255 / 6%);
+  box-shadow: var(--shadow-modal);
+  object-fit: contain;
+}
+
+.lightbox__bar {
+  display: flex;
+  max-width: 60ch;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-sm) var(--space-lg);
+  text-align: center;
+}
+
+.lightbox__caption {
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.lightbox__counter {
+  color: rgb(255 255 255 / 82%);
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+/* ------------------------------- Controles ------------------------------- */
+
+.lightbox__control {
+  position: fixed;
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  border: 0.0625rem solid rgb(255 255 255 / 28%);
+  border-radius: 50%;
+  padding: 0;
+  background: rgb(12 18 16 / 72%);
+  color: var(--color-paper);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-state) var(--ease-out-quart),
+    border-color var(--duration-state) var(--ease-out-quart);
+}
+
+.lightbox__control svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lightbox__control[hidden] {
+  display: none;
+}
+
+.lightbox__control--close {
+  top: max(var(--space-md), env(safe-area-inset-top));
+  right: var(--space-md);
+}
+
+.lightbox__control--prev,
+.lightbox__control--next {
+  top: 50%;
+  translate: 0 -50%;
+}
+
+.lightbox__control--prev {
+  left: var(--space-md);
+}
+
+.lightbox__control--next {
+  right: var(--space-md);
+}
+
+@media (hover: hover) {
+  .lightbox__control:hover {
+    border-color: rgb(255 255 255 / 62%);
+    background: rgb(12 18 16 / 92%);
+  }
+}
+
+.lightbox__control:focus-visible {
+  outline: 0.16rem solid var(--color-paper);
+  outline-offset: 0.22rem;
+}
+
+/* --------------------------- Miniatura ampliable --------------------------
+   El disparador envuelve la foto sin alterar su caja: hereda el radio y el
+   aspecto que ya define cada sección.
+   ------------------------------------------------------------------------- */
+
+.zoom {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  padding: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+}
+
+.zoom:not(:disabled) {
+  cursor: zoom-in;
+}
+
+/* Señal de que la foto se puede abrir; sólo aparece cuando el visor está activo. */
+.zoom::after {
+  position: absolute;
+  right: var(--space-xs);
+  bottom: var(--space-xs);
+  display: grid;
+  width: 1.75rem;
+  height: 1.75rem;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(12 18 16 / 62%);
+  color: var(--color-paper);
+  content: "⤢";
+  font-size: 0.8rem;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity var(--duration-state) var(--ease-out-quart);
+}
+
+.zoom:disabled::after {
+  content: none;
+}
+
+@media (hover: hover) {
+  .zoom:hover::after {
+    opacity: 1;
+  }
+}
+
+/* En táctil no hay hover: la señal se queda visible pero discreta. */
+@media (hover: none) {
+  .zoom:not(:disabled)::after {
+    opacity: 0.85;
+  }
+}
+
+.zoom:focus-visible::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zoom::after,
+  .lightbox__control {
+    transition: none;
+  }
+}

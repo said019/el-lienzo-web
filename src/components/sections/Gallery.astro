@@ -1,0 +1,78 @@
+---
+import { Image } from 'astro:assets';
+import { buildZoomGroup } from '../../lib/zoom';
+import montajeRosa from '../../assets/gallery/montaje-rosa.webp';
+import mesaJardin from '../../assets/spaces/experiencias-celebracion.webp';
+import montajeMediterraneo from '../../assets/gallery/montaje-mediterraneo.webp';
+import terrazaCarpa from '../../assets/gallery/terraza-carpa.webp';
+
+const INSTAGRAM_URL = 'https://www.instagram.com/ellienzo.eventos/';
+
+// Selección corta y distinta a la de la portada: una foto del jardín y tres montajes.
+const shots = [
+  {
+    src: montajeRosa,
+    alt: 'Mesa larga vestida en tonos coral y verde olivo, con vajilla, cristalería y flores de temporada',
+    caption: 'Mesa en tonos rosa',
+  },
+  {
+    src: mesaJardin,
+    alt: 'Mesa de madera con sillas cruzadas sobre el pasto, frente al quiosco del jardín',
+    caption: 'Mesa en el jardín',
+  },
+  {
+    src: montajeMediterraneo,
+    alt: 'Banquete bajo carpa beige con mesas redondas, olivos y cítricos en los centros de mesa',
+    caption: 'Banquete bajo carpa',
+  },
+  {
+    src: terrazaCarpa,
+    alt: 'Carpa con mesas redondas vestidas de blanco, sillas doradas y detalles en azul',
+    caption: 'Montaje bajo carpa',
+  },
+];
+
+const zoomShots = await buildZoomGroup(shots, 'galeria');
+---
+
+<section id="galeria" class="gallery" aria-labelledby="gallery-title">
+  <div class="shell gallery__shell">
+    <header class="gallery__header">
+      <div class="gallery__intro">
+        <p class="eyebrow">Historias que ya tomaron forma</p>
+        <h2 id="gallery-title" class="section-heading gallery__title">
+          Un espacio distinto en cada <em>celebración</em>
+        </h2>
+      </div>
+
+      <a class="button--ghost gallery__action" href={INSTAGRAM_URL} rel="noreferrer">
+        Ver más en Instagram
+      </a>
+    </header>
+
+    <hr class="rule gallery__rule" />
+
+    <ul class="gallery__strip" role="list" data-reveal>
+      {
+        zoomShots.map(({ photo, zoom }) => (
+          <li class="gallery__item">
+            <button class="zoom" type="button" disabled {...zoom}>
+              <Image
+                class="gallery__image"
+                src={photo.src}
+                alt={photo.alt}
+                loading="lazy"
+                decoding="async"
+                widths={[300, 480, 640]}
+                sizes="(max-width: 47.99rem) calc(50vw - 1.5rem), (max-width: 63.99rem) calc(25vw - 1.5rem), 18.5rem"
+              />
+              <span class="sr-only"> (ampliar)</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="note gallery__note">Las imágenes muestran distintos montajes e inspiraciones que no representan ningún paquete en específico.</p>
+  </div>
+</section>

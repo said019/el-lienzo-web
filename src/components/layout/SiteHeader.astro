@@ -1,0 +1,153 @@
+---
+import { Image } from 'astro:assets';
+import logoElLienzo from '../../assets/brand/logo-el-lienzo.png';
+import { WHATSAPP_BASE_URL } from '../../lib/whatsapp';
+
+const navigation = [
+  { label: 'Inicio', href: '#inicio' },
+  { label: 'Espacios', href: '#espacios' },
+  { label: 'Experiencias', href: '#experiencias' },
+  { label: 'Paquetes', href: '#paquetes' },
+  { label: 'Galería', href: '#galeria' },
+];
+const quoteMessage = encodeURIComponent(
+  'Hola, equipo de El Lienzo. Me gustaría cotizar un evento.',
+);
+const quoteUrl = `${WHATSAPP_BASE_URL}?text=${quoteMessage}`;
+---
+
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="#inicio" aria-label="El Lienzo, ir al inicio">
+      <Image
+        class="site-header__logo"
+        src={logoElLienzo}
+        alt=""
+        width={120}
+        loading="eager"
+        decoding="async"
+      />
+    </a>
+
+    <nav class="site-header__nav" aria-label="Navegación principal">
+      <ul class="site-header__nav-list" role="list">
+        {
+          navigation.map((item) => (
+            <li class="site-header__nav-item">
+              <a class="site-header__nav-link" href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="site-header__cta button button--primary" href="#cotiza">Cotizar</a>
+
+    <details class="site-header__menu">
+      <summary
+        class="site-header__menu-trigger"
+        aria-controls="navegacion-movil"
+      >
+        <span class="site-header__menu-label">Menú</span>
+        <span class="site-header__menu-icon" aria-hidden="true"></span>
+      </summary>
+      <nav id="navegacion-movil" class="site-header__menu-panel" aria-label="Navegación móvil">
+        <ul class="site-header__menu-list" role="list">
+          {
+            navigation.map((item, index) => (
+              <li class="site-header__menu-item">
+                <span class="index-number" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <a
+          class="site-header__menu-cta button button--primary"
+          href={quoteUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Cotizar por WhatsApp
+        </a>
+        <p class="site-header__menu-note">San Juan del Río, Querétaro</p>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  const setupHeader = () => {
+    const header = document.querySelector<HTMLElement>('[data-site-header]');
+    if (!header || header.dataset.ready === 'true') return;
+    header.dataset.ready = 'true';
+
+    const syncHeader = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+    };
+
+    const menu = header.querySelector<HTMLDetailsElement>('.site-header__menu');
+    const trigger = menu?.querySelector<HTMLElement>('.site-header__menu-trigger');
+    const menuLabel = menu?.querySelector<HTMLElement>('.site-header__menu-label');
+    const wideScreen = window.matchMedia('(min-width: 72rem)');
+    const inertTargets = Array.from(
+      document.querySelectorAll<HTMLElement>('.skip-link, main, .site-footer'),
+    );
+
+    const syncMenu = () => {
+      const open = menu?.open ?? false;
+      if (menuLabel) menuLabel.textContent = open ? 'Cerrar' : 'Menú';
+      inertTargets.forEach((element) => {
+        element.inert = open;
+      });
+      window.dispatchEvent(
+        new CustomEvent('el-lienzo:navigation-overlay', {
+          detail: { open },
+        }),
+      );
+    };
+
+    menu?.addEventListener('toggle', syncMenu);
+    menu?.querySelectorAll<HTMLAnchorElement>('a').forEach((link) => {
+      link.addEventListener('click', () => menu.removeAttribute('open'));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (!menu?.open) return;
+
+      if (event.key === 'Escape') {
+        menu.removeAttribute('open');
+        trigger?.focus();
+        return;
+      }
+
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(
+        header.querySelectorAll<HTMLElement>(
+          'a[href], summary, button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((element) => element.offsetParent !== null);
+      const first = focusable.at(0);
+      const last = focusable.at(-1);
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    });
+
+    wideScreen.addEventListener('change', ({ matches }) => {
+      if (matches) menu?.removeAttribute('open');
+    });
+
+    window.addEventListener('scroll', syncHeader, { passive: true });
+    syncHeader();
+    syncMenu();
+  };
+
+  document.addEventListener('astro:page-load', setupHeader);
+  setupHeader();
+</script>

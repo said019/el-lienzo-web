@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Página no encontrada | El Lienzo" noIndex>
+  <main class="not-found" id="contenido">
+    <p class="eyebrow">Error 404</p>
+    <h1>Este camino no lleva a El Lienzo.</h1>
+    <p>Regresa al inicio para conocer los espacios y cotizar tu evento.</p>
+    <a class="button" href="/">Volver al inicio</a>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: grid;
+    min-height: 100svh;
+    align-content: center;
+    justify-items: start;
+    gap: 1.5rem;
+    width: var(--shell);
+    margin-inline: auto;
+    padding-block: 5rem;
+  }
+
+  h1 {
+    max-width: 10ch;
+    margin: 0;
+    font-size: var(--text-display);
+  }
+
+  p:not(.eyebrow) {
+    max-width: 42ch;
+  }
+</style>

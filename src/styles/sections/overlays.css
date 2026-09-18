@@ -1,0 +1,306 @@
+/*
+  Superpuestos: diálogo de campaña y acceso flotante a WhatsApp.
+  Son las dos únicas piezas que se levantan por encima de la página, así que
+  aquí vive la única sombra amplia del sitio (--shadow-modal) y el bloqueo de
+  fondo (--color-overlay). El resto del sistema sigue plano.
+*/
+
+/* ======================= Diálogo de promoción =========================== */
+
+.promotion__dialog {
+  width: 100%;
+  max-width: 100%;
+  max-height: min(88dvh, 44rem);
+  border: 0;
+  /* Móvil: panel inferior anclado al borde de la pantalla. */
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  margin: auto auto 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-paper);
+  box-shadow: var(--shadow-modal);
+  color: var(--color-ink);
+}
+
+/* El display sólo aplica abierto: si no, pisaría el dialog:not([open]) del navegador. */
+.promotion__dialog[open] {
+  /* Grid para que la superficie estire hasta el alto real del cuadro. */
+  display: grid;
+}
+
+.promotion__dialog:not([open]) {
+  display: none;
+}
+
+.promotion__dialog::backdrop {
+  background: var(--color-overlay);
+}
+
+.promotion__surface {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+}
+
+/* --------------------------- Botón de cierre ---------------------------- */
+
+.promotion__close {
+  position: absolute;
+  z-index: 2;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  border: 0.0625rem solid var(--color-line);
+  border-radius: 50%;
+  padding: 0;
+  place-items: center;
+  /* Papel opaco: el botón cae sobre foto o sobre texto y debe leerse igual. */
+  background: var(--color-paper);
+  color: var(--color-ink-deep);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-state) var(--ease-out-quart),
+    border-color var(--duration-state) var(--ease-out-quart),
+    color var(--duration-state) var(--ease-out-quart);
+}
+
+.promotion__close-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+@media (hover: hover) {
+  .promotion__close:hover {
+    border-color: var(--color-ink-deep);
+    background: var(--color-ink-deep);
+    color: var(--color-paper);
+  }
+}
+
+/* ------------------------------- Imagen --------------------------------- */
+
+.promotion__media {
+  position: relative;
+  /* Grid: la foto estira al alto de la columna sin depender de porcentajes. */
+  display: grid;
+  height: clamp(8rem, 30vw, 11rem);
+  flex: none;
+  margin: 0;
+  overflow: hidden;
+  background: var(--color-sand);
+}
+
+.promotion__image {
+  position: absolute;
+  inset: 0;
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promotion__media[hidden],
+.promotion__eyebrow[hidden] {
+  display: none;
+}
+
+/* ------------------------------ Contenido ------------------------------- */
+
+.promotion__content {
+  display: block;
+  min-height: 0;
+  flex: 1 1 auto;
+  padding: var(--space-xl) var(--space-lg)
+    calc(var(--space-xl) + env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Sin imagen el cierre queda sobre el antetítulo: le abrimos sitio arriba. */
+.promotion__media[hidden] + .promotion__content {
+  padding-block-start: 4rem;
+}
+
+.promotion__eyebrow {
+  margin-bottom: var(--space-sm);
+  color: var(--color-accent);
+}
+
+.promotion__title {
+  max-width: 20ch;
+  margin-bottom: var(--space-md);
+  font-size: var(--text-heading);
+}
+
+/* El título recibe foco programático al abrir, pero no es interactivo:
+   el recuadro de foco ahí sólo estorbaba a la composición. */
+.promotion__title:focus-visible {
+  outline: none;
+}
+
+.promotion__note {
+  max-width: 46ch;
+  margin: var(--space-md) 0 0;
+  color: var(--color-ink-faint);
+  font-size: var(--text-2xs);
+  line-height: 1.6;
+}
+
+.promotion__note[hidden] {
+  display: none;
+}
+
+.promotion__body {
+  max-width: 46ch;
+  margin-bottom: 0;
+  color: var(--color-ink-soft);
+  font-size: var(--text-xs);
+  line-height: 1.65;
+  /* La campaña llega con saltos de línea propios desde el JSON. */
+  white-space: pre-line;
+}
+
+.promotion__cta {
+  margin-top: var(--space-xl);
+}
+
+/* ------------------------------ Movimiento ------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .promotion__dialog[open]:not([data-reduced-motion="true"]) {
+    animation: promotion-panel-in var(--duration-layout) var(--ease-out-expo) both;
+  }
+
+  .promotion__dialog[open]:not([data-reduced-motion="true"])::backdrop {
+    animation: promotion-veil-in var(--duration-state) var(--ease-out-quart) both;
+  }
+}
+
+@keyframes promotion-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+}
+
+@keyframes promotion-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.985);
+  }
+}
+
+@keyframes promotion-veil-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* --------------------- Escritorio: diálogo centrado --------------------- */
+
+@media (min-width: 48rem) {
+  .promotion__dialog {
+    width: min(52rem, calc(100% - 4rem));
+    max-height: min(36rem, calc(100dvh - 4rem));
+    border-radius: var(--radius-lg);
+    margin: auto;
+  }
+
+  .promotion__surface {
+    flex-direction: row;
+  }
+
+  .promotion__media {
+    height: auto;
+    flex: 1 1 42%;
+    min-width: 0;
+  }
+
+  .promotion__content {
+    flex: 1 1 58%;
+    min-width: 0;
+    /* 4rem arriba deja libre el botón de cierre (0.75rem + 3rem). */
+    padding: 4rem var(--space-2xl) var(--space-2xl);
+  }
+
+  .promotion__media[hidden] + .promotion__content {
+    padding-block-start: 4rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .promotion__dialog[open]:not([data-reduced-motion="true"]) {
+      animation-name: promotion-dialog-in;
+    }
+  }
+}
+
+/* ==================== Acceso flotante a WhatsApp ======================== */
+
+/* Sólo existe en móvil: en escritorio el encabezado ya lleva su propio CTA. */
+.mobile-whatsapp {
+  display: none;
+}
+
+@media (max-width: 47.99rem) {
+  .mobile-whatsapp {
+    position: fixed;
+    /* Por debajo del encabezado fijo y del diálogo (que vive en el top layer). */
+    z-index: calc(var(--z-sticky) - 1);
+    right: max(var(--space-md), env(safe-area-inset-right));
+    bottom: max(var(--space-md), env(safe-area-inset-bottom));
+    display: inline-flex;
+    max-width: calc(100vw - 2rem);
+    min-height: 3.25rem;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    border: 0.09375rem solid var(--color-accent-deep);
+    border-radius: 999px;
+    padding: 0.9rem 1.35rem;
+    background: var(--color-accent-deep);
+    box-shadow: var(--shadow-card);
+    color: var(--color-paper);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition:
+      opacity var(--duration-state) var(--ease-out-quart),
+      transform var(--duration-state) var(--ease-out-quart),
+      visibility 0s;
+  }
+
+  .mobile-whatsapp__icon {
+    width: 1.35rem;
+    height: 1.35rem;
+    flex: none;
+  }
+
+  /*
+    Se retira cuando el formulario de cotización o el pie están en pantalla
+    (lo marca el propio componente) y mientras un diálogo bloquea la página.
+  */
+  .mobile-whatsapp[data-tucked="true"],
+  body:has(dialog[open]) .mobile-whatsapp {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(150%);
+    pointer-events: none;
+    transition-delay: 0s, 0s, var(--duration-state);
+  }
+}
+
+@media (max-width: 47.99rem) and (prefers-reduced-motion: reduce) {
+  .mobile-whatsapp,
+  .mobile-whatsapp[data-tucked="true"],
+  body:has(dialog[open]) .mobile-whatsapp {
+    transform: none;
+    transition: none;
+  }
+}

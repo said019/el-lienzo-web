@@ -1,0 +1,244 @@
+/* ---------------------------------------------------------------------------
+   Espacios · cuatro bloques separados por filete, sin tarjetas flotantes.
+   Cada espacio muestra tres fotos (una grande + dos apiladas) junto a su
+   columna de texto, según el boceto del cliente.
+   --------------------------------------------------------------------------- */
+
+.spaces {
+  scroll-margin-top: 5.5rem;
+}
+
+.spaces__header {
+  margin-bottom: clamp(var(--space-2xl), 5vw, var(--space-3xl));
+}
+
+.spaces__header .section-heading {
+  margin-bottom: 0;
+}
+
+.spaces__list {
+  display: grid;
+  gap: clamp(var(--space-3xl), 7vw, 6rem);
+}
+
+.spaces__item {
+  display: grid;
+  min-width: 0;
+  gap: clamp(var(--space-lg), 3vw, var(--space-2xl));
+  grid-template-areas:
+    "title"
+    "gallery"
+    "content";
+  /* El filete separa un espacio de otro y también el encabezado del primero. */
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: clamp(var(--space-xl), 4vw, var(--space-3xl));
+  scroll-margin-top: 6rem;
+}
+
+/* ------------------------------- Fotografía ------------------------------- */
+
+.spaces__gallery {
+  display: grid;
+  grid-area: gallery;
+  min-width: 0;
+  gap: clamp(0.5rem, 1.2vw, 0.875rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "lead lead"
+    "a    b";
+}
+
+.spaces__figure {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  /* Fondo de reserva mientras carga la imagen. */
+  background: var(--color-sand);
+}
+
+.spaces__figure--lead {
+  grid-area: lead;
+  aspect-ratio: 4 / 3;
+}
+
+.spaces__figure--a {
+  grid-area: a;
+}
+
+.spaces__figure--b {
+  grid-area: b;
+}
+
+.spaces__figure--a,
+.spaces__figure--b {
+  aspect-ratio: 1 / 1;
+}
+
+.spaces__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale var(--duration-layout) var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .spaces__figure:hover .spaces__image {
+    scale: 1.03;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spaces__image {
+    transition: none;
+  }
+
+  .spaces__figure:hover .spaces__image {
+    scale: 1;
+  }
+}
+
+/* --------------------------------- Texto --------------------------------- */
+
+.spaces__title {
+  display: grid;
+  grid-area: title;
+  justify-items: start;
+  align-content: end;
+  gap: var(--space-xs);
+}
+
+.spaces__title > * {
+  margin-bottom: 0;
+}
+
+.spaces__content {
+  display: grid;
+  grid-area: content;
+  min-width: 0;
+  justify-items: start;
+  align-content: start;
+  gap: var(--space-md);
+}
+
+.spaces__content > * {
+  margin-bottom: 0;
+}
+
+.spaces__name {
+  font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+}
+
+.spaces__lead {
+  max-width: 26ch;
+}
+
+.spaces__description {
+  max-width: 46ch;
+}
+
+.spaces__features {
+  gap: var(--space-xs);
+  margin-block: var(--space-2xs) var(--space-xs);
+  color: var(--color-ink);
+}
+
+.spaces__action {
+  margin-top: var(--space-2xs);
+}
+
+.spaces__note {
+  margin-block: clamp(var(--space-2xl), 5vw, var(--space-3xl)) 0;
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: var(--space-lg);
+}
+
+/* ------------------------------ Tablet en adelante ------------------------
+   A partir de aquí las tres fotos forman el racimo del boceto: la grande a
+   un costado y las dos apiladas al otro, con altura común.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .spaces__gallery {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "lead a"
+      "lead b";
+    aspect-ratio: 16 / 10;
+  }
+
+  .spaces__figure--lead,
+  .spaces__figure--a,
+  .spaces__figure--b {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}
+
+/* ------------------------------- Escritorio ------------------------------- */
+
+@media (min-width: 64rem) {
+  .spaces__item {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-areas:
+      "gallery title"
+      "gallery content";
+    column-gap: clamp(var(--space-2xl), 5vw, 4.5rem);
+    row-gap: var(--space-md);
+    align-items: start;
+  }
+
+  .spaces__title {
+    align-self: end;
+    padding-top: var(--space-lg);
+  }
+
+  /* Los espacios pares invierten el orden visual para romper la plantilla:
+     el texto pasa a la izquierda y el racimo se refleja.
+
+     Y con él hay que invertir también los ANCHOS. La regla de arriba reparte
+     1.5fr al primer carril y 1fr al segundo, pensando en que la galería va
+     primera. Al mandarla a la segunda columna sin tocar los carriles, la
+     galería caía en la pista angosta: Establos y Ruedo —los dos pares— se
+     veían notoriamente más chicos que Terrazas y Salón. */
+  .spaces__item--reverse {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    grid-template-areas:
+      "title gallery"
+      "content gallery";
+  }
+
+  .spaces__item--reverse .spaces__gallery {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+    grid-template-areas:
+      "a lead"
+      "b lead";
+  }
+}
+
+/* --------------------------------- Móvil --------------------------------- */
+
+@media (max-width: 39.99rem) {
+  .spaces__header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .spaces__item {
+    gap: var(--space-lg);
+    padding-top: var(--space-lg);
+  }
+
+  .spaces__title {
+    gap: var(--space-2xs);
+  }
+
+  .spaces__name {
+    font-size: clamp(1.75rem, 8vw, 2.25rem);
+  }
+
+  .spaces__lead,
+  .spaces__description {
+    max-width: none;
+  }
+}

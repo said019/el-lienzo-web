@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import logoElLienzo from '../../assets/brand/logo-el-lienzo.png';
+import footerVenue from '../../assets/spaces/jardin-andador.webp';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <figure class="site-footer__media">
+    <Image
+      class="site-footer__image"
+      src={footerVenue}
+      alt="Vista de los jardines de El Lienzo de día, con el andador de piedra y las palmeras"
+      loading="lazy"
+      decoding="async"
+      widths={[583]}
+      sizes="100vw"
+    />
+    <a
+      class="site-footer__instagram"
+      href="https://www.instagram.com/ellienzo.eventos/"
+      rel="noreferrer"
+    >
+      @ELLIENZO.EVENTOS
+    </a>
+  </figure>
+
+  <div class="site-footer__main">
+    <div class="site-footer__identity">
+      <a class="site-footer__brand" href="#inicio" aria-label="El Lienzo, ir al inicio">
+        <Image
+          class="site-footer__logo"
+          src={logoElLienzo}
+          alt=""
+          width={180}
+          loading="lazy"
+          decoding="async"
+        />
+      </a>
+      <p class="site-footer__tagline">Espacios para celebrar</p>
+    </div>
+
+    <address class="site-footer__contact">
+      <p class="site-footer__heading">Contáctanos</p>
+      <ul class="site-footer__contact-list" role="list">
+        <li class="site-footer__contact-item">
+          <span class="site-footer__contact-label">Instagram</span>
+          <a
+            class="site-footer__contact-link"
+            href="https://www.instagram.com/ellienzo.eventos/"
+            rel="noreferrer"
+          >
+            @ellienzo.eventos
+          </a>
+        </li>
+        <li class="site-footer__contact-item">
+          <span class="site-footer__contact-label">Correo</span>
+          <a class="site-footer__contact-link" href="mailto:contacto@ellienzo.com.mx">
+            contacto@ellienzo.com.mx
+          </a>
+        </li>
+        <li class="site-footer__contact-item">
+          <span class="site-footer__contact-label">WhatsApp</span>
+          <a class="site-footer__contact-link" href="https://wa.me/524271032890">
+            +52 (427) 103 2890
+          </a>
+        </li>
+        <li class="site-footer__contact-item">
+          <span class="site-footer__contact-label">Dirección</span>
+          <a
+            class="site-footer__contact-link"
+            href="https://maps.app.goo.gl/5SL2z6c4k6g5KhqJ6"
+            rel="noreferrer"
+          >
+            Antiguo Camino a Ojo de Agua 6, 76807, San Juan del Río, Qro.
+          </a>
+        </li>
+      </ul>
+    </address>
+  </div>
+
+  <div class="site-footer__legal">
+    <p class="site-footer__copyright">© {currentYear} El Lienzo. Todos los derechos reservados.</p>
+    <p class="site-footer__privacy">El formulario prepara tu mensaje, este sitio no almacena tus datos.</p>
+  </div>
+</footer>

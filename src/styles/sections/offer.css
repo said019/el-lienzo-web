@@ -1,0 +1,190 @@
+/*
+  Oferta especial de fin de año.
+  Única sección sobre tinta profunda (.section--ink): funciona como pausa
+  editorial entre las secciones claras y sube el contraste de la campaña.
+  Todo lo que aquí se repinta es para sostener AA sobre ese fondo oscuro.
+*/
+
+.offer {
+  /* El encabezado fijo mide 5.5rem: el ancla #oferta no debe quedar debajo. */
+  scroll-margin-top: 5.5rem;
+}
+
+.offer__shell {
+  display: grid;
+  gap: clamp(var(--space-2xl), 5vw, var(--space-4xl));
+}
+
+/* ------------------------------ Encabezado ------------------------------ */
+
+.offer__header {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.offer__header .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+/* El título es una frase completa, no un rótulo: baja de la escala display
+   a la de encabezado y ensancha la medida para que no se rompa en tiras. */
+.offer__title {
+  max-width: 26ch;
+  margin-bottom: 0;
+  font-size: var(--text-heading);
+  line-height: 1.18;
+}
+
+.offer__title em {
+  /* El acento pizarra no llega a AA sobre tinta: se aclara al tono suave. */
+  color: var(--color-accent-soft);
+}
+
+/* --------------------------------- Filetes ------------------------------- */
+
+.offer__rule {
+  width: 100%;
+  background: var(--color-line-dark);
+}
+
+/* --------------------------------- Opciones ------------------------------ */
+
+.offer__options {
+  display: grid;
+  gap: clamp(var(--space-xl), 4vw, var(--space-3xl));
+}
+
+.offer__choice {
+  max-width: none;
+  margin-bottom: 0;
+  color: var(--color-sand);
+  text-align: center;
+}
+
+.offer__list {
+  display: grid;
+  gap: clamp(var(--space-2xl), 6vw, var(--space-3xl));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.offer__option {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: var(--space-lg);
+}
+
+.offer__media {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  aspect-ratio: 4 / 3;
+  background: var(--color-ink);
+}
+
+.offer__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.offer__copy {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.offer__index {
+  color: var(--color-line-strong);
+}
+
+.offer__name {
+  max-width: 24ch;
+  margin-bottom: 0;
+  color: var(--color-paper);
+  font-size: var(--text-lead);
+  line-height: 1.25;
+}
+
+.offer__description {
+  max-width: 34ch;
+  margin-bottom: 0;
+  color: var(--color-sand);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+/* --------------------------------- Cierre -------------------------------- */
+
+.offer__closing {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-xl);
+  text-align: center;
+}
+
+.offer__closing-title {
+  max-width: 20ch;
+  margin-bottom: 0;
+  color: var(--color-paper);
+  font-family: var(--font-editorial);
+  font-size: var(--text-title);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.05;
+}
+
+.offer__actions {
+  justify-content: center;
+}
+
+.offer__terms {
+  display: grid;
+  gap: var(--space-2xs);
+  max-width: 46ch;
+}
+
+.offer__terms .note {
+  /* Sobre tinta, el gris de .note queda apenas en el límite: se sube a arena. */
+  margin-bottom: 0;
+  color: var(--color-sand-deep);
+}
+
+/* ------------------------------- Responsive ------------------------------ */
+
+@media (min-width: 48rem) {
+  .offer__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(var(--space-xl), 4vw, var(--space-3xl));
+  }
+
+  /* Retícula separada por filete, no por tarjetas. El relleno es simétrico:
+     si sólo lo lleva la segunda columna, sus fotos quedan más angostas que
+     las de la primera y los pies de foto dejan de alinearse. */
+  .offer__option:first-child {
+    padding-right: clamp(var(--space-xl), 4vw, var(--space-3xl));
+  }
+
+  .offer__option + .offer__option {
+    border-left: 0.0625rem solid var(--color-line-dark);
+    padding-left: clamp(var(--space-xl), 4vw, var(--space-3xl));
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .offer__title {
+    max-width: 100%;
+  }
+
+  .offer__media {
+    aspect-ratio: 3 / 2;
+  }
+
+  .offer__name,
+  .offer__description {
+    max-width: 100%;
+  }
+}

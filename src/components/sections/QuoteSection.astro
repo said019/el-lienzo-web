@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import { buildZoomAttributes } from '../../lib/zoom';
+import historiaCarreta from '../../assets/spaces/historia-carreta.webp';
+
+const whatsappMessage = encodeURIComponent(
+  'Hola, equipo de El Lienzo. Me gustaría cotizar un evento.',
+);
+const whatsappUrl = `https://wa.me/524271032890?text=${whatsappMessage}`;
+
+const zoomJardin = await buildZoomAttributes(
+  {
+    src: historiaCarreta,
+    alt: 'Carreta antigua con flores de colores bajo un árbol del jardín',
+    caption: 'La carreta del jardín',
+  },
+  'cotiza',
+);
+---
+
+<section class="quote section" id="cotiza" aria-labelledby="quote-title" data-section="quote">
+  <div class="quote__layout shell">
+    <div class="quote__intro" data-reveal>
+      <p class="eyebrow">Cotiza tu evento</p>
+      <h2
+        class="quote__title section-heading"
+        id="quote-title"
+        tabindex="-1"
+        data-promotion-focus-target
+      >
+        Empecemos por tu <em>idea</em>.
+      </h2>
+      <p class="quote__lead section-lead">
+        Cuéntanos qué tienes en mente y te contactamos con los detalles.
+      </p>
+
+      <div class="quote__aside">
+        <address class="quote__contact">
+          <ul class="quote__contact-list" role="list">
+            <li class="quote__contact-item">
+              <a class="quote__contact-link" href={whatsappUrl} target="_blank" rel="noreferrer">
+                <span class="quote__contact-label">WhatsApp</span>
+                <span class="quote__contact-value">427 103 2890</span>
+              </a>
+            </li>
+            <li class="quote__contact-item">
+              <a class="quote__contact-link" href="mailto:contacto@ellienzo.com.mx">
+                <span class="quote__contact-label">Correo</span>
+                <span class="quote__contact-value">contacto@ellienzo.com.mx</span>
+              </a>
+            </li>
+            <li class="quote__contact-item">
+              <a
+                class="quote__contact-link"
+                href="https://maps.app.goo.gl/5SL2z6c4k6g5KhqJ6"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span class="quote__contact-label">Visítanos</span>
+                <span class="quote__contact-value">San Juan del Río, Querétaro</span>
+              </a>
+            </li>
+          </ul>
+        </address>
+
+        <figure class="quote__media">
+          <button class="zoom" type="button" disabled {...zoomJardin}>
+            <Image
+              class="quote__image"
+              src={historiaCarreta}
+              alt="Carreta antigua con flores de colores bajo un árbol del jardín"
+              loading="lazy"
+              decoding="async"
+              widths={[480, 768, 1200]}
+              sizes="(max-width: 47.99rem) calc(100vw - 2rem), (max-width: 63.99rem) 44vw, 34vw"
+            />
+            <span class="sr-only"> (ampliar)</span>
+          </button>
+        </figure>
+      </div>
+    </div>
+
+    <div class="quote__form" data-reveal>
+      <slot name="form" />
+    </div>
+  </div>
+</section>

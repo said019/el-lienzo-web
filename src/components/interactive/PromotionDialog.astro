@@ -1,0 +1,99 @@
+---
+import type { Promotion } from "../../lib/promotions";
+import { readPromotionStore } from "../../lib/promotion-store";
+
+interface Props {
+  promotions?: readonly Promotion[];
+  id?: string;
+  class?: string;
+  closeLabel?: string;
+}
+
+const storedPromotions: Promotion[] = await readPromotionStore();
+
+const {
+  promotions = storedPromotions,
+  id = "promocion-el-lienzo",
+  class: className,
+  closeLabel = "Cerrar promoción",
+} = Astro.props;
+
+const titleId = `${id}-titulo`;
+const bodyId = `${id}-descripcion`;
+const serializedPromotions = JSON.stringify(promotions).replace(/</g, "\\u003c");
+---
+
+<div
+  class:list={["promotion", className]}
+  data-promotion-root
+  data-promotion-state="loading"
+>
+  <dialog
+    class="promotion__dialog"
+    data-promotion-dialog
+    aria-labelledby={titleId}
+    aria-describedby={bodyId}
+  >
+    <div class="promotion__surface">
+      <button
+        class="promotion__close"
+        type="button"
+        aria-label={closeLabel}
+        data-promotion-close
+      >
+        <svg
+          class="promotion__close-icon"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M6 6 18 18M18 6 6 18"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+          />
+        </svg>
+      </button>
+
+      <figure class="promotion__media" data-promotion-image-wrap hidden>
+        <img
+          class="promotion__image"
+          data-promotion-image
+          loading="lazy"
+          decoding="async"
+          alt=""
+        />
+      </figure>
+
+      <div class="promotion__content">
+        <p class="eyebrow promotion__eyebrow" data-promotion-eyebrow hidden></p>
+        <h2
+          class="promotion__title"
+          id={titleId}
+          data-promotion-title
+          data-promotion-initial-focus
+          tabindex="-1"
+        ></h2>
+        <p class="promotion__body" id={bodyId} data-promotion-body></p>
+        <p class="promotion__note" data-promotion-note hidden></p>
+        <a class="promotion__cta button button--primary" data-promotion-cta></a>
+      </div>
+    </div>
+  </dialog>
+
+  <script
+    type="application/json"
+    data-promotion-config
+    is:inline
+    set:html={serializedPromotions}
+  />
+</div>
+
+<script>
+  import { initPromotionDialogs } from "../../scripts/promotion-dialog";
+
+  initPromotionDialogs();
+  document.addEventListener("astro:page-load", () => initPromotionDialogs());
+</script>

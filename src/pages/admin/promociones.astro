@@ -1,0 +1,1768 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import logoElLienzo from "../../assets/brand/logo-el-lienzo.png";
+
+export const prerender = false;
+---
+
+<BaseLayout
+  title="Promociones | Administración El Lienzo"
+  description="Panel privado para administrar las promociones de El Lienzo."
+  noIndex
+>
+  <main class="admin" id="contenido">
+    <header class="admin__header">
+      <a class="admin__brand" href="/" aria-label="Ir al sitio de El Lienzo">
+        <img src={logoElLienzo.src} alt="El Lienzo" width="445" height="512" />
+      </a>
+      <div>
+        <p class="admin__kicker">Administración</p>
+        <h1>Promociones</h1>
+      </div>
+      <a class="text-link" href="/" target="_blank" rel="noreferrer">
+        Ver sitio
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M7 13 13 7M8 7h5v5" />
+        </svg>
+      </a>
+    </header>
+
+    <section class="access" data-access-panel>
+      <div class="access__mark" aria-hidden="true">
+        <span></span>
+      </div>
+      <div class="access__copy">
+        <p class="admin__kicker">Acceso privado</p>
+        <h2>Edita campañas sin tocar código</h2>
+        <p>
+          Ingresa la contraseña del administrador. Se conservará únicamente
+          mientras esta pestaña permanezca abierta.
+        </p>
+      </div>
+      <form class="access__form" data-login-form>
+        <label for="admin-password">Contraseña</label>
+        <div class="password-field">
+          <input
+            id="admin-password"
+            name="password"
+            type="password"
+            autocomplete="current-password"
+            required
+          />
+          <button type="button" data-toggle-password aria-label="Mostrar contraseña">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2.8 12s3.4-5.5 9.2-5.5 9.2 5.5 9.2 5.5-3.4 5.5-9.2 5.5S2.8 12 2.8 12Z" />
+              <circle cx="12" cy="12" r="2.7" />
+            </svg>
+          </button>
+        </div>
+        <p class="form-message" data-login-message role="status"></p>
+        <button class="button-primary" type="submit" data-login-submit>
+          Entrar al panel
+        </button>
+      </form>
+    </section>
+
+    <section class="workspace" data-workspace hidden>
+      <aside class="campaigns" aria-label="Campañas">
+        <div class="campaigns__heading">
+          <div>
+            <p class="admin__kicker">Campañas</p>
+            <h2>Contenido</h2>
+          </div>
+          <span class="campaigns__count" data-campaign-count>0</span>
+        </div>
+        <div class="campaigns__list" data-campaign-list></div>
+        <button class="button-secondary campaigns__new" type="button" data-new-campaign>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12" /></svg>
+          Nueva campaña
+        </button>
+        <button class="logout" type="button" data-logout>Cerrar sesión</button>
+      </aside>
+
+      <form class="editor" data-promotion-form>
+        <div class="editor__heading">
+          <div>
+            <div class="editor__status-row">
+              <span class="status-pill" data-editor-status>Sin cambios</span>
+              <span class="revision" data-revision-label>Versión 1</span>
+            </div>
+            <h2 data-editor-title>Editar promoción</h2>
+          </div>
+          <label class="publish-toggle">
+            <input type="checkbox" name="enabled" />
+            <span aria-hidden="true"></span>
+            Publicada
+          </label>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section__title">
+            <span>01</span>
+            <div>
+              <h3>Mensaje</h3>
+              <p>El contenido principal que verán tus visitantes.</p>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field field--wide">
+              <span>Identificador</span>
+              <input name="id" required readonly />
+              <small>No cambia después de crear la campaña.</small>
+            </label>
+            <label class="field">
+              <span>Antetítulo</span>
+              <input name="eyebrow" maxlength="50" placeholder="Oferta especial" />
+            </label>
+            <label class="field field--wide">
+              <span>Título</span>
+              <input name="title" maxlength="80" required />
+            </label>
+            <label class="field field--wide">
+              <span>Descripción</span>
+              <textarea name="body" maxlength="700" rows="6" required></textarea>
+            </label>
+            <label class="field field--wide">
+              <span>Vigencia y condiciones</span>
+              <textarea name="note" maxlength="300" rows="3"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section__title">
+            <span>02</span>
+            <div>
+              <h3>Programación</h3>
+              <p>La campaña se activa y termina automáticamente.</p>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span>Inicio</span>
+              <input name="startsAt" type="datetime-local" required />
+            </label>
+            <label class="field">
+              <span>Fin</span>
+              <input name="endsAt" type="datetime-local" required />
+            </label>
+            <label class="field">
+              <span>Prioridad</span>
+              <input name="priority" type="number" min="-100" max="100" required />
+              <small>El número más alto aparece primero.</small>
+            </label>
+            <label class="field">
+              <span>Estilo</span>
+              <select name="tone">
+                <option value="canvas">Lienzo claro</option>
+                <option value="terracotta">Terracota</option>
+                <option value="forest">Bosque</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section__title">
+            <span>03</span>
+            <div>
+              <h3>Imagen y botón</h3>
+              <p>Sube tu imagen y ajusta el encuadre antes de publicar.</p>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="image-upload field--wide">
+              <label class="field" for="promotion-image-file">
+                <span>Subir imagen</span>
+                <input id="promotion-image-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="upload-help upload-message" data-image-file />
+                <small id="upload-help">Selecciona una foto de tu celular o computadora. JPG, PNG o WebP, hasta 10 MB.</small>
+              </label>
+              <p id="upload-message" class="form-message" data-upload-message role="status"></p>
+              <input name="imageSrc" type="hidden" />
+              <input name="imageWidth" type="hidden" />
+              <input name="imageHeight" type="hidden" />
+            </div>
+            <fieldset class="image-framing field--wide" data-image-framing hidden>
+              <legend>Ajustar imagen</legend>
+              <div class="image-framing__previews">
+                <figure>
+                  <div class="image-framing__frame image-framing__frame--mobile"><img data-frame-image alt="Encuadre en móvil" /></div>
+                  <figcaption>Móvil · imagen horizontal</figcaption>
+                </figure>
+                <figure>
+                  <div class="image-framing__frame image-framing__frame--desktop"><img data-frame-image alt="Encuadre en escritorio" /></div>
+                  <figcaption>Escritorio · imagen vertical</figcaption>
+                </figure>
+              </div>
+              <label class="field">
+                <span>Cómo se ajusta</span>
+                <select name="imageFit">
+                  <option value="contain">Imagen completa (sin recortar)</option>
+                  <option value="cover">Llenar el espacio (recortar bordes)</option>
+                </select>
+                <small>Para flyers con texto, usa imagen completa y zoom al 100%. El espacio libre toma el color del fondo.</small>
+              </label>
+              <label class="field">
+                <span>Zoom <output data-image-zoom-label>100%</output></span>
+                <input name="imageZoom" type="range" min="1" max="2.5" step="0.05" value="1" />
+              </label>
+              <label class="field">
+                <span>Posición horizontal <output data-image-x-label>50%</output></span>
+                <input name="imagePositionX" type="range" min="0" max="100" value="50" />
+                <small>Izquierda → derecha</small>
+              </label>
+              <label class="field">
+                <span>Posición vertical <output data-image-y-label>50%</output></span>
+                <input name="imagePositionY" type="range" min="0" max="100" value="50" />
+                <small>Arriba → abajo</small>
+              </label>
+              <div class="image-framing__actions">
+                <button type="button" class="button-secondary" data-reset-image>Restablecer encuadre</button>
+                <button type="button" class="button-danger" data-remove-image>Quitar imagen</button>
+              </div>
+              <p class="image-framing__hint">Vista de encuadre de referencia. Guarda los cambios para aplicar la imagen y su ajuste al pop-up.</p>
+            </fieldset>
+            <label class="field field--wide">
+              <span>Descripción de imagen</span>
+              <input name="imageAlt" maxlength="160" />
+            </label>
+            <label class="field">
+              <span>Texto del botón</span>
+              <input name="ctaLabel" maxlength="40" required />
+            </label>
+            <label class="field">
+              <span>Destino del botón</span>
+              <input name="ctaHref" required placeholder="#cotiza" />
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section__title">
+            <span>04</span>
+            <div>
+              <h3>Cuándo aparece</h3>
+              <p>Define el momento menos invasivo para mostrarla.</p>
+            </div>
+          </div>
+          <div class="field-grid">
+            <label class="field">
+              <span>Disparador</span>
+              <select name="triggerMode">
+                <option value="either">Tiempo o desplazamiento</option>
+                <option value="delay">Solo por tiempo</option>
+                <option value="scroll">Solo al desplazarse</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Espera en segundos</span>
+              <input name="delaySeconds" type="number" min="3" max="30" required />
+            </label>
+            <label class="field">
+              <span>Avance de página (%)</span>
+              <input name="scrollPercent" type="number" min="10" max="80" required />
+            </label>
+          </div>
+        </div>
+
+        <div class="editor__actions">
+          <p class="form-message" data-save-message role="status"></p>
+          <button class="button-danger" type="button" data-delete-campaign>
+            Eliminar
+          </button>
+          <button class="button-primary" type="submit" data-save-button>
+            Guardar y publicar cambios
+          </button>
+        </div>
+      </form>
+
+      <aside class="preview" aria-label="Vista previa de la promoción">
+        <div class="preview__heading">
+          <div>
+            <p class="admin__kicker">Vista previa</p>
+            <h2>Así se verá</h2>
+          </div>
+          <span>En vivo</span>
+        </div>
+        <div class="preview__stage">
+          <article class="preview-card" data-preview-card data-tone="canvas">
+            <button type="button" aria-label="Cerrar vista previa">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" /></svg>
+            </button>
+            <div class="preview-card__media" data-preview-media>
+              <img data-preview-image alt="" />
+              <div class="preview-card__placeholder" data-preview-placeholder>
+                Vista de imagen
+              </div>
+            </div>
+            <div class="preview-card__content">
+              <p class="preview-card__eyebrow" data-preview-eyebrow></p>
+              <h3 data-preview-title></h3>
+              <p class="preview-card__body" data-preview-body></p>
+              <p class="preview-card__note" data-preview-note></p>
+              <span class="preview-card__cta" data-preview-cta></span>
+            </div>
+          </article>
+        </div>
+      </aside>
+    </section>
+  </main>
+</BaseLayout>
+
+<script>
+  import { applyPromotionImageFrame, type PromotionImage } from "../../lib/promotions";
+  type PromotionTone = "canvas" | "terracotta" | "forest";
+  type TriggerMode = "delay" | "scroll" | "either";
+
+  interface Promotion {
+    id: string;
+    revision: number;
+    enabled: boolean;
+    priority: number;
+    startsAt: string;
+    endsAt: string;
+    eyebrow?: string;
+    title: string;
+    body: string;
+    note?: string;
+    image?: PromotionImage | undefined;
+    cta: { label: string; href: string };
+    trigger: { mode: TriggerMode; delayMs: number; scrollPercent: number };
+    tone: PromotionTone;
+  }
+
+  const accessPanel = document.querySelector<HTMLElement>("[data-access-panel]");
+  const workspace = document.querySelector<HTMLElement>("[data-workspace]");
+  const loginForm = document.querySelector<HTMLFormElement>("[data-login-form]");
+  const loginMessage = document.querySelector<HTMLElement>("[data-login-message]");
+  const loginSubmit = document.querySelector<HTMLButtonElement>("[data-login-submit]");
+  const form = document.querySelector<HTMLFormElement>("[data-promotion-form]");
+  const campaignList = document.querySelector<HTMLElement>("[data-campaign-list]");
+  const campaignCount = document.querySelector<HTMLElement>("[data-campaign-count]");
+  const saveMessage = document.querySelector<HTMLElement>("[data-save-message]");
+  const saveButton = document.querySelector<HTMLButtonElement>("[data-save-button]");
+  const editorStatus = document.querySelector<HTMLElement>("[data-editor-status]");
+  const editorTitle = document.querySelector<HTMLElement>("[data-editor-title]");
+  const revisionLabel = document.querySelector<HTMLElement>("[data-revision-label]");
+
+  let password = "";
+  let promotions: Promotion[] = [];
+  let selectedId = "";
+  let dirty = false;
+  let uploading = false;
+  let uploadController: AbortController | undefined;
+  const imageFile = document.querySelector<HTMLInputElement>("[data-image-file]");
+  const uploadMessage = document.querySelector<HTMLElement>("[data-upload-message]");
+
+  const field = <T extends HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+    name: string,
+  ): T => form?.elements.namedItem(name) as T;
+
+  const value = (name: string): string => field(name).value.trim();
+  const optionalNumber = (name: string): number | undefined => {
+    const raw = value(name);
+    return raw ? Number(raw) : undefined;
+  };
+
+  const pad = (part: number): string => String(part).padStart(2, "0");
+  const toLocalInput = (iso: string): string => {
+    const date = new Date(iso);
+    if (!Number.isFinite(date.getTime())) return "";
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  };
+  const toIso = (local: string): string => new Date(local).toISOString();
+
+  const selectedPromotion = (): Promotion | undefined =>
+    promotions.find((promotion) => promotion.id === selectedId);
+
+  function createCampaign(): Promotion {
+    const now = new Date();
+    const end = new Date(now);
+    end.setDate(end.getDate() + 30);
+    const suffix = Date.now().toString().slice(-6);
+    return {
+      id: `campana-${suffix}`,
+      revision: 1,
+      enabled: false,
+      priority: 0,
+      startsAt: now.toISOString(),
+      endsAt: end.toISOString(),
+      eyebrow: "Nueva promoción",
+      title: "Escribe aquí el título de la campaña",
+      body: "Agrega los beneficios y condiciones principales de esta promoción.",
+      note: "Consulta términos y condiciones.",
+      cta: { label: "Cotiza tu evento", href: "#cotiza" },
+      trigger: { mode: "either", delayMs: 8000, scrollPercent: 35 },
+      tone: "canvas",
+    };
+  }
+
+  function setMessage(
+    element: HTMLElement | null,
+    message: string,
+    state: "error" | "success" | "neutral" = "neutral",
+  ): void {
+    if (!element) return;
+    element.textContent = message;
+    element.dataset.state = state;
+  }
+
+  function setDirty(nextDirty: boolean): void {
+    dirty = nextDirty;
+    if (!editorStatus) return;
+    editorStatus.textContent = dirty ? "Cambios sin guardar" : "Guardado";
+    editorStatus.dataset.state = dirty ? "dirty" : "saved";
+  }
+
+  function renderCampaignList(): void {
+    if (!campaignList) return;
+    campaignList.replaceChildren();
+
+    [...promotions]
+      .sort((a, b) => b.priority - a.priority)
+      .forEach((promotion, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.disabled = uploading;
+        button.className = "campaign-item";
+        button.dataset.selected = String(promotion.id === selectedId);
+        button.style.setProperty("--campaign-index", String(index));
+
+        const indicator = document.createElement("span");
+        indicator.className = "campaign-item__indicator";
+        indicator.dataset.enabled = String(promotion.enabled);
+
+        const copy = document.createElement("span");
+        copy.className = "campaign-item__copy";
+        const title = document.createElement("strong");
+        title.textContent = promotion.title;
+        const meta = document.createElement("small");
+        meta.textContent = promotion.enabled ? "Publicada" : "Borrador";
+        copy.append(title, meta);
+
+        button.append(indicator, copy);
+        button.addEventListener("click", () => {
+          selectedId = promotion.id;
+          renderCampaignList();
+          fillForm(promotion);
+        });
+        campaignList.append(button);
+      });
+
+    if (campaignCount) campaignCount.textContent = String(promotions.length);
+  }
+
+  function fillForm(promotion: Promotion): void {
+    if (!form) return;
+    field<HTMLInputElement>("id").value = promotion.id;
+    field<HTMLInputElement>("enabled").checked = promotion.enabled;
+    field<HTMLInputElement>("priority").value = String(promotion.priority);
+    field<HTMLInputElement>("startsAt").value = toLocalInput(promotion.startsAt);
+    field<HTMLInputElement>("endsAt").value = toLocalInput(promotion.endsAt);
+    field<HTMLInputElement>("eyebrow").value = promotion.eyebrow ?? "";
+    field<HTMLInputElement>("title").value = promotion.title;
+    field<HTMLTextAreaElement>("body").value = promotion.body;
+    field<HTMLTextAreaElement>("note").value = promotion.note ?? "";
+    field<HTMLInputElement>("imageSrc").value = promotion.image?.src ?? "";
+    field<HTMLInputElement>("imageAlt").value = promotion.image?.alt ?? "";
+    field<HTMLSelectElement>("imageFit").value = promotion.image?.fit ?? "cover";
+    field<HTMLInputElement>("imageZoom").value = String(promotion.image?.zoom ?? 1);
+    field<HTMLInputElement>("imagePositionX").value = String(promotion.image?.positionX ?? 50);
+    field<HTMLInputElement>("imagePositionY").value = String(promotion.image?.positionY ?? 50);
+    if (imageFile) imageFile.value = "";
+    setMessage(uploadMessage, "");
+    field<HTMLInputElement>("imageWidth").value = promotion.image?.width
+      ? String(promotion.image.width)
+      : "";
+    field<HTMLInputElement>("imageHeight").value = promotion.image?.height
+      ? String(promotion.image.height)
+      : "";
+    field<HTMLInputElement>("ctaLabel").value = promotion.cta.label;
+    field<HTMLInputElement>("ctaHref").value = promotion.cta.href;
+    field<HTMLSelectElement>("triggerMode").value = promotion.trigger.mode;
+    field<HTMLInputElement>("delaySeconds").value = String(
+      promotion.trigger.delayMs / 1000,
+    );
+    field<HTMLInputElement>("scrollPercent").value = String(
+      promotion.trigger.scrollPercent,
+    );
+    field<HTMLSelectElement>("tone").value = promotion.tone;
+
+    if (editorTitle) editorTitle.textContent = promotion.title;
+    if (revisionLabel) revisionLabel.textContent = `Versión ${promotion.revision}`;
+    setMessage(saveMessage, "");
+    renderPreview(promotion);
+  }
+
+  function readForm(): Promotion {
+    const existing = selectedPromotion();
+    const imageSrc = value("imageSrc");
+    const imageWidth = optionalNumber("imageWidth");
+    const imageHeight = optionalNumber("imageHeight");
+
+    return {
+      id: value("id"),
+      revision: existing?.revision ?? 1,
+      enabled: field<HTMLInputElement>("enabled").checked,
+      priority: Number(value("priority")),
+      startsAt: toIso(value("startsAt")),
+      endsAt: toIso(value("endsAt")),
+      ...(value("eyebrow") ? { eyebrow: value("eyebrow") } : {}),
+      title: value("title"),
+      body: field<HTMLTextAreaElement>("body").value.trim(),
+      ...(field<HTMLTextAreaElement>("note").value.trim()
+        ? { note: field<HTMLTextAreaElement>("note").value.trim() }
+        : {}),
+      ...(imageSrc
+        ? {
+            image: {
+              src: imageSrc,
+              alt: value("imageAlt"),
+              fit: value("imageFit") as "cover" | "contain",
+              zoom: Number(value("imageZoom")),
+              positionX: Number(value("imagePositionX")),
+              positionY: Number(value("imagePositionY")),
+              ...(imageWidth ? { width: imageWidth } : {}),
+              ...(imageHeight ? { height: imageHeight } : {}),
+            },
+          }
+        : {}),
+      cta: { label: value("ctaLabel"), href: value("ctaHref") },
+      trigger: {
+        mode: value("triggerMode") as TriggerMode,
+        delayMs: Number(value("delaySeconds")) * 1000,
+        scrollPercent: Number(value("scrollPercent")),
+      },
+      tone: value("tone") as PromotionTone,
+    };
+  }
+
+  function replaceSelected(promotion: Promotion): void {
+    promotions = promotions.map((item) =>
+      item.id === selectedId ? promotion : item,
+    );
+  }
+
+  function renderPreview(promotion: Promotion): void {
+    const card = document.querySelector<HTMLElement>("[data-preview-card]");
+    const eyebrow = document.querySelector<HTMLElement>("[data-preview-eyebrow]");
+    const title = document.querySelector<HTMLElement>("[data-preview-title]");
+    const body = document.querySelector<HTMLElement>("[data-preview-body]");
+    const note = document.querySelector<HTMLElement>("[data-preview-note]");
+    const cta = document.querySelector<HTMLElement>("[data-preview-cta]");
+    const image = document.querySelector<HTMLImageElement>("[data-preview-image]");
+    const placeholder = document.querySelector<HTMLElement>("[data-preview-placeholder]");
+
+    if (card) card.dataset.tone = promotion.tone;
+    if (eyebrow) eyebrow.textContent = promotion.eyebrow ?? "";
+    if (title) title.textContent = promotion.title;
+    if (body) body.textContent = promotion.body;
+    if (note) note.textContent = promotion.note ?? "";
+    if (cta) cta.textContent = promotion.cta.label;
+    const framing = document.querySelector<HTMLElement>("[data-image-framing]");
+    if (framing) framing.hidden = !promotion.image?.src;
+    document.querySelectorAll<HTMLImageElement>("[data-frame-image]").forEach((frame) => {
+      if (promotion.image) {
+        if (frame.getAttribute("src") !== promotion.image.src) frame.src = promotion.image.src;
+        applyPromotionImageFrame(frame, promotion.image);
+      } else { frame.removeAttribute("src"); }
+    });
+    const labels = {
+      "[data-image-zoom-label]": Math.round((promotion.image?.zoom ?? 1) * 100),
+      "[data-image-x-label]": promotion.image?.positionX ?? 50,
+      "[data-image-y-label]": promotion.image?.positionY ?? 50,
+    };
+    Object.entries(labels).forEach(([selector, number]) => {
+      const label = document.querySelector(selector);
+      if (label) label.textContent = `${number}%`;
+    });
+
+    if (image && placeholder) {
+      if (promotion.image?.src) {
+        if (image.getAttribute("src") !== promotion.image.src) image.src = promotion.image.src;
+        image.alt = promotion.image.alt;
+        applyPromotionImageFrame(image, promotion.image);
+        image.hidden = false;
+        placeholder.hidden = true;
+        image.onerror = () => {
+          image.hidden = true;
+          placeholder.hidden = false;
+          placeholder.textContent = "No se pudo cargar la imagen";
+        };
+      } else {
+        image.removeAttribute("src");
+        image.hidden = true;
+        placeholder.hidden = false;
+        placeholder.textContent = "Vista de imagen";
+      }
+    }
+  }
+
+  function resetFrame(): void {
+    field<HTMLSelectElement>("imageFit").value = "contain";
+    field<HTMLInputElement>("imageZoom").value = "1";
+    field<HTMLInputElement>("imagePositionX").value = "50";
+    field<HTMLInputElement>("imagePositionY").value = "50";
+  }
+
+  // Image changes remain editable even while a text/date field is incomplete.
+  function syncImage(): void {
+    const selected = selectedPromotion();
+    if (!selected) return;
+    selected.image = value("imageSrc") ? {
+      src: value("imageSrc"),
+      alt: value("imageAlt"),
+      width: optionalNumber("imageWidth"),
+      height: optionalNumber("imageHeight"),
+      fit: value("imageFit") as "cover" | "contain",
+      zoom: Number(value("imageZoom")),
+      positionX: Number(value("imagePositionX")),
+      positionY: Number(value("imagePositionY")),
+    } : undefined;
+    renderPreview(selected);
+    setDirty(true);
+  }
+
+  document.querySelector("[data-image-framing]")?.addEventListener("input", syncImage);
+  document.querySelector("[data-reset-image]")?.addEventListener("click", () => {
+    resetFrame();
+    syncImage();
+  });
+  document.querySelector("[data-remove-image]")?.addEventListener("click", () => {
+    if (uploading) return;
+    ["imageSrc", "imageWidth", "imageHeight", "imageAlt"].forEach((name) => { field(name).value = ""; });
+    if (imageFile) imageFile.value = "";
+    setMessage(uploadMessage, "Imagen retirada de esta campaña. Guarda para aplicar el cambio.");
+    syncImage();
+  });
+
+  imageFile?.addEventListener("change", async () => {
+    const file = imageFile.files?.[0];
+    if (!file || uploading) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setMessage(uploadMessage, "Usa una imagen JPG, PNG o WebP.", "error");
+      imageFile.value = "";
+      return;
+    }
+    if (!file.size || file.size > 10 * 1024 * 1024) {
+      setMessage(uploadMessage, "La imagen debe pesar como máximo 10 MB y no estar vacía.", "error");
+      imageFile.value = "";
+      return;
+    }
+    const campaignId = selectedId;
+    const controller = new AbortController();
+    uploadController = controller;
+    uploading = true;
+    imageFile.disabled = true;
+    if (saveButton) saveButton.disabled = true;
+    document.querySelectorAll<HTMLButtonElement>("[data-new-campaign], [data-delete-campaign], [data-remove-image]").forEach((button) => { button.disabled = true; });
+    renderCampaignList();
+    setMessage(uploadMessage, "Subiendo y preparando imagen…");
+    try {
+      const data = new FormData();
+      data.set("image", file);
+      const response = await fetch("/api/promotion-images", {
+        method: "POST", headers: { Authorization: `Bearer ${password}` },
+        body: data, signal: controller.signal,
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error ?? "No se pudo subir la imagen.");
+      if (controller.signal.aborted || selectedId !== campaignId) return;
+      field<HTMLInputElement>("imageSrc").value = result.image.src;
+      field<HTMLInputElement>("imageWidth").value = String(result.image.width);
+      field<HTMLInputElement>("imageHeight").value = String(result.image.height);
+      resetFrame();
+      syncImage();
+      setMessage(uploadMessage, "Imagen lista. Ajusta el encuadre y guarda los cambios para publicarla.", "success");
+    } catch (error) {
+      if (!controller.signal.aborted) setMessage(uploadMessage, error instanceof Error ? error.message : "No se pudo subir. Intenta nuevamente.", "error");
+    } finally {
+      uploading = false;
+      uploadController = undefined;
+      imageFile.disabled = false;
+      imageFile.value = "";
+      if (saveButton) saveButton.disabled = false;
+      document.querySelectorAll<HTMLButtonElement>("[data-new-campaign], [data-delete-campaign], [data-remove-image]").forEach((button) => { button.disabled = false; });
+      renderCampaignList();
+    }
+  });
+
+  async function loadPromotions(): Promise<void> {
+    const response = await fetch("/api/promotions", {
+      headers: { Authorization: `Bearer ${password}` },
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error ?? "No se pudo entrar al panel.");
+    promotions = result.promotions;
+    selectedId = promotions[0]?.id ?? "";
+  }
+
+  loginForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    password = new FormData(loginForm).get("password")?.toString() ?? "";
+    if (!password) return;
+
+    if (loginSubmit) {
+      loginSubmit.disabled = true;
+      loginSubmit.textContent = "Verificando…";
+    }
+    setMessage(loginMessage, "Verificando acceso…");
+
+    try {
+      await loadPromotions();
+      if (accessPanel) accessPanel.hidden = true;
+      if (workspace) workspace.hidden = false;
+      renderCampaignList();
+      const selected = selectedPromotion();
+      if (selected) fillForm(selected);
+      setDirty(false);
+    } catch (error) {
+      setMessage(
+        loginMessage,
+        error instanceof Error ? error.message : "No se pudo entrar al panel.",
+        "error",
+      );
+    } finally {
+      if (loginSubmit) {
+        loginSubmit.disabled = false;
+        loginSubmit.textContent = "Entrar al panel";
+      }
+    }
+  });
+
+  form?.addEventListener("input", (event) => {
+    if (event.target === imageFile) return;
+    if (!form.checkValidity()) return;
+    try {
+      const promotion = readForm();
+      replaceSelected(promotion);
+      renderPreview(promotion);
+      if (editorTitle) editorTitle.textContent = promotion.title;
+      renderCampaignList();
+      setDirty(true);
+    } catch {
+      setDirty(true);
+    }
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (uploading) return;
+    if (!form.reportValidity()) return;
+
+    const promotion = readForm();
+    promotion.revision = (selectedPromotion()?.revision ?? 0) + 1;
+    replaceSelected(promotion);
+
+    if (saveButton) {
+      saveButton.disabled = true;
+      saveButton.textContent = "Guardando…";
+    }
+    setMessage(saveMessage, "Guardando los cambios…");
+
+    try {
+      const response = await fetch("/api/promotions", {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${password}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ promotions }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        const detail = Array.isArray(result.issues)
+          ? result.issues.map((issue: { message: string }) => issue.message).join(" ")
+          : "";
+        throw new Error(`${result.error ?? "No se pudo guardar."} ${detail}`.trim());
+      }
+
+      promotions = result.promotions;
+      const saved = selectedPromotion();
+      if (saved) fillForm(saved);
+      renderCampaignList();
+      setDirty(false);
+      setMessage(saveMessage, "Cambios publicados correctamente.", "success");
+    } catch (error) {
+      setMessage(
+        saveMessage,
+        error instanceof Error ? error.message : "No se pudieron guardar los cambios.",
+        "error",
+      );
+    } finally {
+      if (saveButton) {
+        saveButton.disabled = false;
+        saveButton.textContent = "Guardar y publicar cambios";
+      }
+    }
+  });
+
+  document.querySelector("[data-new-campaign]")?.addEventListener("click", () => {
+    if (uploading) return;
+    const campaign = createCampaign();
+    promotions.push(campaign);
+    selectedId = campaign.id;
+    renderCampaignList();
+    fillForm(campaign);
+    setDirty(true);
+    field<HTMLInputElement>("title").focus();
+  });
+
+  document.querySelector("[data-delete-campaign]")?.addEventListener("click", () => {
+    if (uploading) return;
+    if (promotions.length <= 1) {
+      setMessage(saveMessage, "Debe existir al menos una campaña.", "error");
+      return;
+    }
+    const selected = selectedPromotion();
+    if (!selected || !window.confirm(`¿Eliminar la campaña “${selected.title}”?`)) return;
+    promotions = promotions.filter((promotion) => promotion.id !== selectedId);
+    selectedId = promotions[0]?.id ?? "";
+    renderCampaignList();
+    const next = selectedPromotion();
+    if (next) fillForm(next);
+    setDirty(true);
+    setMessage(saveMessage, "Campaña eliminada. Guarda para confirmar el cambio.");
+  });
+
+  document.querySelector("[data-logout]")?.addEventListener("click", () => {
+    uploadController?.abort();
+    password = "";
+    promotions = [];
+    selectedId = "";
+    loginForm?.reset();
+    if (workspace) workspace.hidden = true;
+    if (accessPanel) accessPanel.hidden = false;
+    setMessage(loginMessage, "");
+  });
+
+  document.querySelector("[data-toggle-password]")?.addEventListener("click", (event) => {
+    const input = document.querySelector<HTMLInputElement>("#admin-password");
+    if (!input) return;
+    const button = event.currentTarget as HTMLButtonElement;
+    input.type = input.type === "password" ? "text" : "password";
+    button.setAttribute(
+      "aria-label",
+      input.type === "password" ? "Mostrar contraseña" : "Ocultar contraseña",
+    );
+  });
+
+  window.addEventListener("beforeunload", (event) => {
+    if (!dirty) return;
+    event.preventDefault();
+  });
+</script>
+
+<style>
+  :global(body) {
+    background: #f1f0ed;
+    color: #34353f;
+  }
+
+  :global([hidden]) {
+    display: none !important;
+  }
+
+  .admin {
+    min-height: 100dvh;
+    padding: clamp(1rem, 2.5vw, 2.5rem);
+    font-family: "Albert Sans Variable", sans-serif;
+  }
+
+  .admin__header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    max-width: 1540px;
+    margin: 0 auto clamp(2rem, 5vw, 5rem);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(52, 53, 63, 0.18);
+  }
+
+  .admin__brand {
+    display: grid;
+    width: 3.25rem;
+    height: 3.25rem;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #34353f;
+  }
+
+  .admin__brand img {
+    width: 2.35rem;
+    height: auto;
+    filter: brightness(0) invert(1);
+  }
+
+  .admin__kicker {
+    margin: 0 0 0.15rem;
+    color: #7b6155;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  h1,
+  h2,
+  h3,
+  p {
+    margin-top: 0;
+  }
+
+  h1 {
+    margin-bottom: 0;
+    font-family: "Darker Grotesque Variable", sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.7rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.9;
+  }
+
+  .text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: inherit;
+    font-size: 0.84rem;
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .text-link svg,
+  button svg {
+    width: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.5;
+  }
+
+  .access {
+    display: grid;
+    grid-template-columns: minmax(8rem, 0.55fr) minmax(15rem, 1fr) minmax(17rem, 0.85fr);
+    align-items: center;
+    gap: clamp(2rem, 7vw, 8rem);
+    max-width: 1200px;
+    min-height: min(650px, 72dvh);
+    margin: auto;
+  }
+
+  .access__mark {
+    position: relative;
+    width: min(18vw, 13rem);
+    aspect-ratio: 1;
+    border: 1.25rem solid #34353f;
+    border-radius: 50%;
+    opacity: 0.92;
+  }
+
+  .access__mark span {
+    position: absolute;
+    bottom: calc(100% + 0.8rem);
+    left: 50%;
+    width: 1.25rem;
+    height: 3.8rem;
+    background: #34353f;
+    transform: translateX(-50%);
+  }
+
+  .access__copy h2 {
+    max-width: 9ch;
+    margin-bottom: 1.3rem;
+    font-family: "Darker Grotesque Variable", sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5.6rem);
+    font-weight: 450;
+    letter-spacing: -0.06em;
+    line-height: 0.83;
+  }
+
+  .access__copy > p:last-child {
+    max-width: 44ch;
+    margin-bottom: 0;
+    color: #6b6a68;
+    line-height: 1.65;
+  }
+
+  .access__form {
+    padding: clamp(1.4rem, 3vw, 2.4rem);
+    border: 1px solid rgba(52, 53, 63, 0.16);
+    background: rgba(255, 255, 255, 0.62);
+    box-shadow: 0 24px 70px -42px rgba(52, 53, 63, 0.42);
+  }
+
+  .access__form > label,
+  .field > span {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .password-field {
+    position: relative;
+  }
+
+  .password-field input {
+    padding-right: 3.2rem;
+  }
+
+  .password-field button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: grid;
+    width: 3rem;
+    height: 100%;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: #6d6c69;
+    cursor: pointer;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    border: 1px solid rgba(52, 53, 63, 0.22);
+    border-radius: 0;
+    outline: 0;
+    background: rgba(255, 255, 255, 0.7);
+    color: #34353f;
+    font: inherit;
+    font-size: 0.9rem;
+    transition: border-color 180ms ease, background-color 180ms ease;
+  }
+
+  input,
+  select {
+    min-height: 3rem;
+    padding: 0.7rem 0.85rem;
+  }
+
+  textarea {
+    min-height: 7rem;
+    padding: 0.85rem;
+    line-height: 1.5;
+    resize: vertical;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #8f5f4c;
+    background: #fff;
+    box-shadow: inset 3px 0 0 #8f5f4c;
+  }
+
+  input[readonly] {
+    color: #75736f;
+    background: rgba(52, 53, 63, 0.05);
+  }
+
+  button,
+  .text-link,
+  .admin__brand {
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease;
+  }
+
+  button:active,
+  .text-link:active,
+  .admin__brand:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  button:disabled {
+    cursor: wait;
+    opacity: 0.55;
+  }
+
+  .button-primary,
+  .button-secondary,
+  .button-danger {
+    min-height: 3rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 750;
+    cursor: pointer;
+  }
+
+  .button-primary {
+    background: #34353f;
+    color: #f7f5f1;
+  }
+
+  .button-primary:hover {
+    background: #4a4b55;
+  }
+
+  .button-secondary {
+    border-color: rgba(52, 53, 63, 0.24);
+    background: transparent;
+    color: #34353f;
+  }
+
+  .button-danger {
+    border-color: rgba(138, 69, 51, 0.2);
+    background: transparent;
+    color: #8a4533;
+  }
+
+  .access__form .button-primary {
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+
+  .form-message {
+    min-height: 1.25rem;
+    margin: 0.65rem 0 0;
+    color: #6b6a68;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
+  .form-message[data-state="error"] {
+    color: #9a3f2f;
+  }
+
+  .form-message[data-state="success"] {
+    color: #3f6a58;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: minmax(13rem, 0.56fr) minmax(32rem, 1.55fr) minmax(20rem, 0.9fr);
+    align-items: start;
+    gap: clamp(1rem, 2vw, 2rem);
+    max-width: 1540px;
+    margin: auto;
+  }
+
+  .campaigns,
+  .preview {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .campaigns {
+    min-height: calc(100dvh - 10rem);
+    padding-right: 1.25rem;
+    border-right: 1px solid rgba(52, 53, 63, 0.16);
+  }
+
+  .campaigns__heading,
+  .preview__heading,
+  .editor__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .campaigns h2,
+  .preview h2,
+  .editor__heading h2 {
+    margin-bottom: 0;
+    font-family: "Darker Grotesque Variable", sans-serif;
+    font-size: 2rem;
+    font-weight: 550;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .campaigns__count,
+  .preview__heading > span {
+    display: grid;
+    min-width: 2rem;
+    min-height: 2rem;
+    place-items: center;
+    border: 1px solid rgba(52, 53, 63, 0.18);
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+
+  .campaigns__list {
+    display: grid;
+    gap: 0.15rem;
+    margin: 1.5rem 0;
+  }
+
+  :global(.campaign-item) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.85rem 0.7rem;
+    border: 0;
+    border-left: 2px solid transparent;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    animation: campaign-in 320ms both;
+    animation-delay: calc(var(--campaign-index) * 55ms);
+  }
+
+  :global(.campaign-item[data-selected="true"]) {
+    border-left-color: #8f5f4c;
+    background: rgba(255, 255, 255, 0.58);
+  }
+
+  :global(.campaign-item__indicator) {
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background: #a19e98;
+  }
+
+  :global(.campaign-item__indicator[data-enabled="true"]) {
+    background: #577463;
+    box-shadow: 0 0 0 4px rgba(87, 116, 99, 0.1);
+  }
+
+  :global(.campaign-item__copy) {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  :global(.campaign-item__copy strong),
+  :global(.campaign-item__copy small) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :global(.campaign-item__copy strong) {
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  :global(.campaign-item__copy small) {
+    color: #7a7873;
+    font-size: 0.68rem;
+  }
+
+  .campaigns__new {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+  }
+
+  .logout {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.6rem;
+    border: 0;
+    background: transparent;
+    color: #77746f;
+    font: inherit;
+    font-size: 0.75rem;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+    cursor: pointer;
+  }
+
+  .editor {
+    display: grid;
+    gap: 0;
+    min-width: 0;
+    background: rgba(255, 255, 255, 0.48);
+  }
+
+  .editor__heading {
+    padding: clamp(1.2rem, 2vw, 2rem);
+    border-bottom: 1px solid rgba(52, 53, 63, 0.13);
+  }
+
+  .editor__status-row {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .status-pill,
+  .revision {
+    font-size: 0.66rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .status-pill {
+    color: #3f6a58;
+  }
+
+  .status-pill[data-state="dirty"] {
+    color: #965d36;
+  }
+
+  .revision {
+    color: #85817a;
+  }
+
+  .publish-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .publish-toggle input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .publish-toggle span {
+    position: relative;
+    width: 2.6rem;
+    height: 1.45rem;
+    border-radius: 2rem;
+    background: #b4b0a9;
+    transition: background-color 180ms ease;
+  }
+
+  .publish-toggle span::after {
+    position: absolute;
+    top: 0.2rem;
+    left: 0.2rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    border-radius: 50%;
+    background: #fff;
+    content: "";
+    transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .publish-toggle input:checked + span {
+    background: #577463;
+  }
+
+  .publish-toggle input:checked + span::after {
+    transform: translateX(1.15rem);
+  }
+
+  .publish-toggle input:focus-visible + span {
+    outline: 2px solid #8f5f4c;
+    outline-offset: 3px;
+  }
+
+  .form-section {
+    padding: clamp(1.5rem, 3vw, 2.6rem) clamp(1.2rem, 2vw, 2rem);
+    border-bottom: 1px solid rgba(52, 53, 63, 0.13);
+  }
+
+  .form-section__title {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.7rem;
+  }
+
+  .form-section__title > span {
+    padding-top: 0.18rem;
+    color: #8f5f4c;
+    font-family: "Darker Grotesque Variable", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .form-section__title h3 {
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+    font-weight: 750;
+  }
+
+  .form-section__title p {
+    margin-bottom: 0;
+    color: #7a7771;
+    font-size: 0.77rem;
+  }
+
+  .field-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+
+  .field--wide {
+    grid-column: 1 / -1;
+  }
+
+  .field small {
+    display: block;
+    margin-top: 0.4rem;
+    color: #85817a;
+    font-size: 0.68rem;
+    line-height: 1.35;
+  }
+
+  .editor__actions {
+    z-index: 2;
+    position: sticky;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem clamp(1.2rem, 2vw, 2rem);
+    border-top: 1px solid rgba(52, 53, 63, 0.13);
+    background: rgba(241, 240, 237, 0.92);
+    backdrop-filter: blur(18px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  }
+
+  .editor__actions .form-message {
+    margin: 0;
+  }
+
+  .preview {
+    min-width: 0;
+  }
+
+  .preview__heading {
+    margin-bottom: 1.5rem;
+  }
+
+  .preview__heading > span {
+    width: auto;
+    padding-inline: 0.7rem;
+    border-radius: 2rem;
+    color: #577463;
+  }
+
+  .preview__stage {
+    position: relative;
+    display: grid;
+    min-height: 640px;
+    place-items: center;
+    overflow: hidden;
+    padding: clamp(1rem, 2.5vw, 2rem);
+    background:
+      linear-gradient(rgba(36, 42, 43, 0.72), rgba(36, 42, 43, 0.72)),
+      url("/images/promotions/cierre-2026.webp") center / cover;
+  }
+
+  .preview-card {
+    position: relative;
+    width: min(100%, 25rem);
+    overflow: hidden;
+    color: #34353f;
+    background: #f6f3ee;
+    box-shadow: 0 32px 70px -34px rgba(15, 20, 21, 0.75);
+    transform: translateZ(0);
+  }
+
+  .preview-card[data-tone="terracotta"] {
+    background: #a66d55;
+    color: #fff9f4;
+  }
+
+  .preview-card[data-tone="forest"] {
+    background: #33463e;
+    color: #f6f2ea;
+  }
+
+  .preview-card > button {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.65rem;
+    z-index: 1;
+    display: grid;
+    width: 2.25rem;
+    height: 2.25rem;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(246, 243, 238, 0.88);
+    color: #34353f;
+  }
+
+  .preview-card__media {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #d7d2ca;
+  }
+
+  .preview-card__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .preview-card__placeholder {
+    display: grid;
+    height: 100%;
+    place-items: center;
+    color: #6e6a64;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .preview-card__content {
+    padding: clamp(1.4rem, 3vw, 2.2rem);
+  }
+
+  .preview-card__eyebrow {
+    margin-bottom: 0.55rem;
+    font-size: 0.66rem;
+    font-weight: 750;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .preview-card h3 {
+    margin-bottom: 0.85rem;
+    font-family: "Darker Grotesque Variable", sans-serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 520;
+    letter-spacing: -0.05em;
+    line-height: 0.88;
+  }
+
+  .preview-card__body {
+    margin-bottom: 1rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    white-space: pre-line;
+  }
+
+  .preview-card__note {
+    margin-bottom: 1.2rem;
+    font-size: 0.65rem;
+    line-height: 1.45;
+    opacity: 0.75;
+  }
+
+  .preview-card__cta {
+    display: inline-block;
+    padding: 0.75rem 1rem;
+    background: #34353f;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+
+  .preview-card[data-tone="terracotta"] .preview-card__cta,
+  .preview-card[data-tone="forest"] .preview-card__cta {
+    background: #f6f3ee;
+    color: #34353f;
+  }
+
+  @keyframes campaign-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .image-upload {
+    padding: 1.1rem;
+    border: 1px dashed #9faaa5;
+    background: #f6f7f4;
+  }
+
+  .image-upload input[type="file"] {
+    width: 100%;
+    min-width: 0;
+    padding: 0.55rem;
+    font-size: 0.85rem;
+  }
+
+  .image-upload input::file-selector-button {
+    min-height: 44px;
+    margin-right: 0.6rem;
+    padding: 0.6rem 0.8rem;
+    border: 0;
+    background: #495f67;
+    color: #fff;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .image-framing {
+    display: grid;
+    min-width: 0;
+    gap: 1rem;
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid #d7d2ca;
+  }
+
+  .image-framing[hidden] { display: none; }
+  .image-framing legend { padding-inline: 0.4rem; font-weight: 700; }
+  .image-framing__previews { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 0.8rem; align-items: center; }
+  .image-framing figure { min-width: 0; margin: 0; }
+  .image-framing figcaption { margin-top: 0.5rem; font-size: 0.7rem; color: #686963; }
+  .image-framing__frame { position: relative; overflow: hidden; background: var(--color-sand); }
+  .image-framing__frame--mobile { aspect-ratio: 390 / 128; }
+  .image-framing__frame--desktop { aspect-ratio: 350 / 450; }
+  .image-framing__frame img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .image-framing output { float: right; color: #686963; font-variant-numeric: tabular-nums; }
+  .image-framing input[type="range"] { width: 100%; min-height: 44px; padding: 0; accent-color: #495f67; cursor: pointer; }
+  .image-framing__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .image-framing__hint { margin: 0; font-size: 0.75rem; color: #686963; }
+  button:disabled { cursor: wait; opacity: 0.65; }
+
+  @media (max-width: 1180px) {
+    .workspace {
+      grid-template-columns: minmax(12rem, 0.55fr) minmax(30rem, 1.45fr);
+    }
+
+    .preview {
+      position: static;
+      grid-column: 2;
+    }
+
+    .preview__stage {
+      min-height: 520px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .admin {
+      padding: 1rem;
+    }
+
+    .admin__header {
+      margin-bottom: 2.5rem;
+    }
+
+    .admin__brand {
+      width: 2.8rem;
+      height: 2.8rem;
+    }
+
+    .text-link {
+      font-size: 0;
+    }
+
+    .text-link svg {
+      width: 1.4rem;
+    }
+
+    .access {
+      grid-template-columns: 1fr;
+      gap: 2.2rem;
+      min-height: auto;
+      padding-block: 1rem 3rem;
+    }
+
+    .access__mark {
+      width: 6rem;
+      border-width: 0.65rem;
+    }
+
+    .access__mark span {
+      bottom: calc(100% + 0.35rem);
+      width: 0.65rem;
+      height: 1.7rem;
+    }
+
+    .access__copy h2 {
+      max-width: 10ch;
+      font-size: 3.3rem;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .campaigns,
+    .preview {
+      position: static;
+      grid-column: 1;
+    }
+
+    .campaigns {
+      min-height: auto;
+      padding: 0 0 1.5rem;
+      border-right: 0;
+      border-bottom: 1px solid rgba(52, 53, 63, 0.16);
+    }
+
+    .campaigns__list {
+      display: flex;
+      margin-block: 1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+    }
+
+    :global(.campaign-item) {
+      min-width: 13rem;
+      scroll-snap-align: start;
+    }
+
+    .editor {
+      order: 2;
+    }
+
+    .preview {
+      order: 3;
+      margin-top: 1.5rem;
+    }
+
+    .field-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .field--wide {
+      grid-column: auto;
+    }
+
+    .editor__heading {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .editor__actions {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .editor__actions .form-message {
+      grid-column: 1 / -1;
+    }
+
+    .preview__stage {
+      min-height: 460px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.campaign-item) {
+      animation: none;
+    }
+
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

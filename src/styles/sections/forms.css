@@ -1,0 +1,319 @@
+/*
+  Formulario de cotización · sistema editorial claro.
+  El marcado, los ids y la validación accesible ya funcionan: aquí sólo se
+  repinta. Campos sobre papel con filete de 1px, retícula de dos columnas en
+  escritorio y una sola en móvil, y estados (foco, error, éxito) que nunca se
+  comunican sólo con color.
+*/
+
+.quote-form {
+  border: 0.0625rem solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: clamp(var(--space-lg), 4vw, var(--space-2xl));
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* El script alterna [hidden] en errores y resumen: esta regla gana a
+   cualquier display que se declare más abajo. */
+.quote-form [hidden] {
+  display: none;
+}
+
+/* ------------------------------- Retícula ------------------------------- */
+
+.quote-form__fields {
+  display: grid;
+  gap: clamp(var(--space-lg), 3vw, var(--space-xl));
+}
+
+.quote-form__field {
+  display: grid;
+  min-width: 0;
+  align-content: start;
+  gap: var(--space-2xs);
+  /* El encabezado fijo mide 5.5rem: al saltar al primer campo inválido no
+     debe quedar debajo. */
+  scroll-margin-top: 7rem;
+}
+
+/* ------------------------------- Etiquetas ------------------------------- */
+
+.quote-form__field label {
+  color: var(--color-ink-deep);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+}
+
+/* "(opcional)" va tenue, pero en el gris que sí alcanza AA sobre papel. */
+.quote-form__field label span {
+  color: var(--color-ink-soft);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* -------------------------------- Campos -------------------------------- */
+
+.quote-form__field input,
+.quote-form__field select,
+.quote-form__field textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 3.25rem;
+  border: 0.0625rem solid var(--color-line);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  background-color: var(--color-paper);
+  color: var(--color-ink-deep);
+  font-family: var(--font-body);
+  /* Nunca por debajo de 1rem: iOS hace zoom automático si el campo es menor. */
+  font-size: max(1rem, var(--text-body));
+  font-weight: 400;
+  line-height: 1.4;
+  transition:
+    border-color var(--duration-fast) var(--ease-out-quart),
+    box-shadow var(--duration-fast) var(--ease-out-quart);
+}
+
+.quote-form__field textarea {
+  min-height: 8.5rem;
+  padding-block: 0.9rem;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.quote-form__field input::placeholder,
+.quote-form__field textarea::placeholder {
+  color: var(--color-ink-soft);
+  opacity: 1;
+}
+
+/* Chevron propio para que los <select> compartan filete y altura con los
+   inputs en todos los navegadores. */
+.quote-form__field select {
+  appearance: none;
+  padding-right: 2.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.75 6 6.5l5-4.75' fill='none' stroke='%235d6a65' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.75rem auto;
+  cursor: pointer;
+}
+
+.quote-form__field select:invalid {
+  /* Mientras sigue en "Selecciona una opción" se lee como marcador. */
+  color: var(--color-ink-soft);
+}
+
+/* Safari en iOS centra y recorta el valor de las fechas si no se normaliza. */
+.quote-form__field input[type="date"] {
+  appearance: none;
+}
+
+.quote-form__field input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.quote-form__field input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.55;
+}
+
+/* El autorrelleno de Chrome pinta su propio azul: lo tapamos con papel. */
+.quote-form__field input:-webkit-autofill {
+  box-shadow: inset 0 0 0 100rem var(--color-paper);
+  -webkit-text-fill-color: var(--color-ink-deep);
+}
+
+/* --------------------------------- Foco ---------------------------------
+   Acento en el filete + anillo tenue + outline visible: si el usuario no
+   distingue el color, el cambio de grosor sigue estando ahí.
+   ------------------------------------------------------------------------ */
+
+.quote-form__field input:focus-visible,
+.quote-form__field select:focus-visible,
+.quote-form__field textarea:focus-visible {
+  border-color: var(--color-accent);
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--color-accent),
+    0 0 0 0.1875rem var(--color-accent-soft);
+  outline: 0.125rem solid var(--color-accent-deep);
+  outline-offset: 0.3125rem;
+}
+
+@media (hover: hover) {
+  .quote-form__field input:hover:not(:focus-visible),
+  .quote-form__field select:hover:not(:focus-visible),
+  .quote-form__field textarea:hover:not(:focus-visible) {
+    border-color: var(--color-line-strong);
+  }
+}
+
+/* -------------------------------- Errores -------------------------------- */
+
+.quote-form__field [aria-invalid="true"] {
+  border-color: var(--color-error);
+  /* Filete doble: el error tampoco se comunica sólo por color. */
+  box-shadow: inset 0 0 0 0.0625rem var(--color-error);
+}
+
+.quote-form__field [aria-invalid="true"]:focus-visible {
+  border-color: var(--color-error);
+  box-shadow:
+    inset 0 0 0 0.0625rem var(--color-error),
+    0 0 0 0.1875rem var(--color-error-surface);
+  outline-color: var(--color-error);
+}
+
+.quote-form__error {
+  margin: var(--space-2xs) 0 0;
+  border-left: 0.1875rem solid var(--color-error);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-error-surface);
+  color: var(--color-error);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Resumen de la validación: se lee como una alerta completa, no como una
+   línea suelta de texto rojo. */
+.quote-form__summary {
+  margin: 0 0 var(--space-lg);
+  border: 0.0625rem solid var(--color-error);
+  border-left-width: 0.25rem;
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-error-surface);
+  color: var(--color-error);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+/* --------------------------- Apoyos y avisos ----------------------------- */
+
+.quote-form__hint,
+.quote-form__privacy,
+.quote-form__required-note,
+.quote-form__noscript {
+  margin: 0;
+  color: var(--color-ink-soft);
+  font-size: var(--text-xs);
+  line-height: 1.55;
+}
+
+.quote-form__hint {
+  margin-top: var(--space-2xs);
+}
+
+.quote-form__required-note {
+  margin-bottom: var(--space-xl);
+}
+
+.quote-form__noscript {
+  margin-top: var(--space-lg);
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: var(--space-md);
+}
+
+.quote-form__noscript a {
+  color: var(--color-accent-deep);
+  font-weight: 600;
+}
+
+/* -------------------------------- Acciones ------------------------------- */
+
+.quote-form__actions {
+  display: grid;
+  gap: var(--space-md);
+  margin-top: clamp(var(--space-xl), 4vw, var(--space-2xl));
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: clamp(var(--space-lg), 3vw, var(--space-xl));
+}
+
+.quote-form__submit {
+  /* min-width:0 evita el mínimo automático del ítem de grid, que con el texto
+     al 200 % ensanchaba el botón más allá de su columna. */
+  width: min(100%, 22rem);
+  min-width: 0;
+  justify-self: start;
+}
+
+/* Red de seguridad: si el botón llegara sin .button--primary, conserva el
+   mismo aspecto del sistema global (relleno de acento, alto táctil, versales). */
+.quote-form button[type="submit"]:not(.button):not(.button--primary) {
+  display: inline-flex;
+  min-height: 3.25rem;
+  align-items: center;
+  justify-content: center;
+  border: 0.09375rem solid var(--color-accent);
+  border-radius: var(--radius-button);
+  padding: 0.95rem 1.75rem;
+  background: var(--color-accent);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* --------------------------------- Éxito --------------------------------- */
+
+.quote-form__status {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.55;
+}
+
+.quote-form__status:not(:empty) {
+  margin-top: var(--space-lg);
+  border: 0.0625rem solid var(--color-success);
+  border-left-width: 0.25rem;
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-success-surface);
+  color: var(--color-success);
+  font-weight: 500;
+}
+
+/* ------------------------------- Responsive ------------------------------ */
+
+/* Dos columnas para los campos cortos; el comentario ocupa el ancho completo.
+   Por debajo de 48rem —y con el texto al 200 %— vuelve a una sola columna. */
+@media (min-width: 48rem) {
+  .quote-form__fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(var(--space-lg), 3vw, var(--space-xl));
+  }
+
+  .quote-form__field--comments {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 39.99rem) {
+  .quote-form {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .quote-form__submit {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote-form__field input,
+  .quote-form__field select,
+  .quote-form__field textarea {
+    transition: none;
+  }
+}

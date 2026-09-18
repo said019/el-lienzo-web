@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import { buildZoomAttributes } from '../../lib/zoom';
+import charcuteriaImage from '../../assets/promotions/campana-charcuteria.webp';
+import clericotImage from '../../assets/promotions/campana-clericot.webp';
+
+const options = [
+  {
+    slug: 'charcuteria',
+    index: '01',
+    name: 'Mini domo personalizado de Charcutería.',
+    description: 'Con el logo de tu empresa o identidad de tu evento.',
+    image: charcuteriaImage,
+    imageAlt: 'Tabla de charcutería con quesos, fruta y carnes frías',
+  },
+  {
+    slug: 'clericot',
+    index: '02',
+    name: 'Barra de Clericot',
+    description: 'Para disfrutar y brindar con tus invitados.',
+    image: clericotImage,
+    imageAlt: 'Jarra y vaso de clericot con cítricos y frutos rojos',
+  },
+];
+
+const optionsWithZoom = await Promise.all(
+  options.map(async (option) => ({
+    option,
+    zoom: await buildZoomAttributes(
+      {
+        src: option.image,
+        alt: option.imageAlt,
+        caption: option.name.replace(/\.$/, ''),
+      },
+      'oferta',
+    ),
+  })),
+);
+---
+
+<section id="oferta" class="section section--ink offer" aria-labelledby="offer-title">
+  <div class="shell offer__shell">
+    <header class="offer__header" data-reveal>
+      <p class="eyebrow">Oferta especial</p>
+      <h2 id="offer-title" class="section-heading offer__title">
+        Obtén un <em>10% de descuento</em> de renta cerrando tu evento antes de noviembre del 2026.
+      </h2>
+    </header>
+
+    <hr class="rule offer__rule" />
+
+    <div class="offer__options" data-reveal>
+      <p class="section-lead offer__choice">Y elige entre:</p>
+
+      <ul class="offer__list">
+        {
+          optionsWithZoom.map(({ option, zoom }) => (
+            <li class="offer__option">
+              <figure class="offer__media">
+                <button class="zoom" type="button" disabled {...zoom}>
+                  <Image
+                    class="offer__image"
+                    src={option.image}
+                    alt={option.imageAlt}
+                    loading="lazy"
+                    decoding="async"
+                    widths={[480, 768, 1200]}
+                    sizes="(max-width: 47.99rem) calc(100vw - 2rem), 46vw"
+                  />
+                  <span class="sr-only"> (ampliar)</span>
+                </button>
+              </figure>
+
+              <div class="offer__copy">
+                <span class="index-number offer__index" aria-hidden="true">
+                  {option.index}
+                </span>
+                <h3 class="offer__name">{option.name}</h3>
+                <p class="offer__description">{option.description}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <hr class="rule offer__rule" />
+
+    <footer class="offer__closing" data-reveal>
+      <p class="offer__closing-title">¡Estamos listos para celebrar contigo!</p>
+
+      <div class="button-row offer__actions">
+        <a class="button button--primary" href="#cotiza">Cotiza tu evento</a>
+      </div>
+
+      <div class="offer__terms">
+        <p class="note">Promoción válida del 1 de septiembre al 31 de octubre del 2026.</p>
+        <p class="note">Consulta términos y condiciones.</p>
+      </div>
+    </footer>
+  </div>
+</section>

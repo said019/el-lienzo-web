@@ -1,0 +1,33 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/layout/SiteHeader.astro";
+import SiteFooter from "../components/layout/SiteFooter.astro";
+import Hero from "../components/sections/Hero.astro";
+import Spaces from "../components/sections/Spaces.astro";
+import Experiences from "../components/sections/Experiences.astro";
+import Packages from "../components/sections/Packages.astro";
+import Gallery from "../components/sections/Gallery.astro";
+import QuoteSection from "../components/sections/QuoteSection.astro";
+import QuoteForm from "../components/interactive/QuoteForm.astro";
+import PromotionDialog from "../components/interactive/PromotionDialog.astro";
+import Lightbox from "../components/interactive/Lightbox.astro";
+import MobileWhatsApp from "../components/interactive/MobileWhatsApp.astro";
+---
+
+<BaseLayout image="/og/el-lienzo-og.jpg">
+  <SiteHeader />
+  <main id="contenido">
+    <Hero />
+    <Spaces />
+    <Experiences />
+    <Packages />
+    <Gallery />
+    <QuoteSection>
+      <QuoteForm slot="form" />
+    </QuoteSection>
+    <MobileWhatsApp />
+  </main>
+  <SiteFooter />
+  <PromotionDialog />
+  <Lightbox />
+</BaseLayout>

@@ -1,0 +1,269 @@
+---
+import { WHATSAPP_NUMBER } from "../../lib/whatsapp";
+
+interface Props {
+  id?: string;
+  class?: string;
+  submitLabel?: string;
+}
+
+const {
+  id = "cotizacion",
+  class: className,
+  submitLabel = "Quiero cotizar",
+} = Astro.props;
+
+const fallbackMessage =
+  "Hola, quiero conocer El Lienzo y solicitar una cotización para mi evento.";
+const fieldId = (field: string) => `${id}-${field}`;
+const errorId = (field: string) => `${id}-${field}-error`;
+---
+
+<form
+  class:list={["quote-form", className]}
+  id={id}
+  action="https://api.whatsapp.com/send"
+  method="get"
+  accept-charset="UTF-8"
+  aria-label="Formulario de cotización"
+  data-quote-form
+  data-quote-engaged="false"
+  data-submission-state="idle"
+>
+  <input type="hidden" name="phone" value={WHATSAPP_NUMBER} />
+  <input
+    type="hidden"
+    name="text"
+    value={fallbackMessage}
+    data-whatsapp-message
+  />
+
+  <p class="quote-form__summary" role="alert" data-quote-summary hidden></p>
+
+  <p class="quote-form__required-note">
+    Los campos sin la indicación “opcional” son obligatorios.
+  </p>
+
+  <div class="quote-form__fields">
+    <div class="quote-form__field quote-form__field--name">
+      <label for={fieldId("name")}>Nombre</label>
+      <input
+        id={fieldId("name")}
+        type="text"
+        autocomplete="name"
+        minlength="2"
+        maxlength="100"
+        required
+        aria-describedby={errorId("name")}
+        data-quote-field="name"
+      />
+      <p
+        class="quote-form__error"
+        id={errorId("name")}
+        data-quote-error
+        data-error-for="name"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--phone">
+      <label for={fieldId("phone")}>Teléfono</label>
+      <input
+        id={fieldId("phone")}
+        type="tel"
+        autocomplete="tel"
+        inputmode="tel"
+        pattern="[0-9+() .-]{10,20}"
+        maxlength="20"
+        placeholder="427 000 0000"
+        required
+        aria-describedby={errorId("phone")}
+        data-quote-field="phone"
+      />
+      <p
+        class="quote-form__error"
+        id={errorId("phone")}
+        data-quote-error
+        data-error-for="phone"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--email">
+      <label for={fieldId("email")}>Correo electrónico <span>(opcional)</span></label>
+      <input
+        id={fieldId("email")}
+        type="email"
+        autocomplete="email"
+        maxlength="120"
+        placeholder="nombre@correo.com"
+        aria-describedby={errorId("email")}
+        data-quote-field="email"
+      />
+      <p
+        class="quote-form__error"
+        id={errorId("email")}
+        data-quote-error
+        data-error-for="email"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--event">
+      <label for={fieldId("event-type")}>Tipo de evento</label>
+      <select
+        id={fieldId("event-type")}
+        required
+        aria-describedby={errorId("eventType")}
+        data-quote-field="eventType"
+      >
+        <option value="" selected disabled>Selecciona una opción</option>
+        <option value="boda">Boda</option>
+        <option value="xv">XV años</option>
+        <option value="familiar">Celebración familiar</option>
+        <option value="corporativo">Evento corporativo</option>
+        <option value="otro">Otro evento</option>
+      </select>
+      <p
+        class="quote-form__error"
+        id={errorId("eventType")}
+        data-quote-error
+        data-error-for="eventType"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--date">
+      <label for={fieldId("event-date")}>Fecha estimada</label>
+      <input
+        id={fieldId("event-date")}
+        type="date"
+        required
+        aria-describedby={`${fieldId("date-hint")} ${errorId("eventDate")}`}
+        data-quote-field="eventDate"
+      />
+      <p class="quote-form__hint" id={fieldId("date-hint")}>
+        Si aún no es definitiva, elige la fecha que tienes en mente.
+      </p>
+      <p
+        class="quote-form__error"
+        id={errorId("eventDate")}
+        data-quote-error
+        data-error-for="eventDate"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--guests">
+      <label for={fieldId("guests")}>Número estimado de invitados</label>
+      <input
+        id={fieldId("guests")}
+        type="number"
+        inputmode="numeric"
+        min="1"
+        max="1000"
+        step="1"
+        required
+        aria-describedby={errorId("guests")}
+        data-quote-field="guests"
+      />
+      <p
+        class="quote-form__error"
+        id={errorId("guests")}
+        data-quote-error
+        data-error-for="guests"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--space">
+      <label for={fieldId("space")}>Espacio de interés <span>(opcional)</span></label>
+      <select id={fieldId("space")} data-quote-field="space">
+        <option value="por-definir">Aún no lo sé</option>
+        <option value="terrazas">Terrazas</option>
+        <option value="establos">Establos</option>
+        <option value="salon">Salón</option>
+        <option value="ruedo">Ruedo</option>
+      </select>
+      <p
+        class="quote-form__error"
+        id={errorId("space")}
+        data-quote-error
+        data-error-for="space"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--package">
+      <label for={fieldId("package")}>Paquete de interés <span>(opcional)</span></label>
+      <select
+        id={fieldId("package")}
+        data-quote-field="packageOption"
+      >
+        <option value="por-definir">Aún no lo sé</option>
+        <option value="basico">Básico</option>
+        <option value="completo">Completo</option>
+        <option value="premium">Premium</option>
+      </select>
+      <p
+        class="quote-form__error"
+        id={errorId("packageOption")}
+        data-quote-error
+        data-error-for="packageOption"
+        hidden
+      ></p>
+    </div>
+
+    <div class="quote-form__field quote-form__field--comments">
+      <label for={fieldId("comments")}>Cuéntanos tu idea <span>(opcional)</span></label>
+      <textarea
+        id={fieldId("comments")}
+        rows="4"
+        maxlength="800"
+        aria-describedby={`${fieldId("comments-hint")} ${errorId("comments")}`}
+        data-quote-field="comments"
+      ></textarea>
+      <p class="quote-form__hint" id={fieldId("comments-hint")}>
+        Montaje, horario o cualquier detalle que nos ayude a orientarte.
+      </p>
+      <p
+        class="quote-form__error"
+        id={errorId("comments")}
+        data-quote-error
+        data-error-for="comments"
+        hidden
+      ></p>
+    </div>
+  </div>
+
+  <div class="quote-form__actions">
+    <button class="button button--primary quote-form__submit" type="submit">
+      {submitLabel}
+    </button>
+    <p class="quote-form__privacy">
+      WhatsApp abrirá con tu información lista para revisar. Nada se envía hasta que tú confirmes.
+    </p>
+  </div>
+
+  <p class="quote-form__status" role="status" aria-live="polite" data-quote-status></p>
+
+  <noscript>
+    <p class="quote-form__noscript">
+      También puedes escribirnos directamente al
+      <a
+        href={`https://wa.me/${WHATSAPP_NUMBER}`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        +52 427 103 2890
+      </a>.
+    </p>
+  </noscript>
+</form>
+
+<script>
+  import { initQuoteForms } from "../../scripts/quote-form";
+
+  initQuoteForms();
+  document.addEventListener("astro:page-load", () => initQuoteForms());
+</script>

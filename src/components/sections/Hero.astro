@@ -1,0 +1,131 @@
+---
+import { Image } from 'astro:assets';
+import { buildZoomAttributes, buildZoomGroup } from '../../lib/zoom';
+import heroCarpa from '../../assets/spaces/hero-el-lienzo.webp';
+import jardinPalmeras from '../../assets/spaces/jardin-palmeras-dia.webp';
+import ceremoniaArco from '../../assets/gallery/ceremonia-arco.webp';
+import establosMesaAzul from '../../assets/gallery/establos-mesa-azul.webp';
+import salonMesa from '../../assets/gallery/salon-mesa.webp';
+import { WHATSAPP_BASE_URL } from '../../lib/whatsapp';
+
+const visitMessage = encodeURIComponent(
+  'Hola, equipo de El Lienzo. Me gustaría agendar una visita para conocer los espacios. ¿Qué fechas tienen disponibles?',
+);
+const visitUrl = `${WHATSAPP_BASE_URL}?text=${visitMessage}`;
+
+const leadImage = {
+  src: heroCarpa,
+  label: 'La carpa al anochecer',
+  alt: 'Carpa iluminada al anochecer sobre los jardines de El Lienzo, con cortinas claras y una celebración en curso.',
+};
+
+const supportImages = [
+  {
+    src: jardinPalmeras,
+    label: 'Jardines',
+    alt: 'Jardines de El Lienzo en un día despejado, con palmeras altas y la escalinata al fondo.',
+  },
+  {
+    src: ceremoniaArco,
+    label: 'Ceremonias',
+    alt: 'Ceremonia al aire libre sobre el pasto, con arco de flores, camino de fibra natural y sillas de madera.',
+  },
+  {
+    src: establosMesaAzul,
+    label: 'Establos',
+    alt: 'Mesas largas montadas bajo el techo de los Establos, con cristalería en tonos azules.',
+  },
+  {
+    src: salonMesa,
+    label: 'Salón',
+    alt: 'Salón techado con mesas de madera puestas, flores rojas y ventanales al jardín.',
+  },
+];
+
+/* Un solo recorrido en el visor: la foto grande y las cuatro complementarias.
+   El orden lo toma el visor del DOM, no de aquí. */
+const zoomLead = await buildZoomAttributes(
+  { src: leadImage.src, alt: leadImage.alt, caption: leadImage.label },
+  'portada',
+);
+const zoomSupport = await buildZoomGroup(
+  supportImages.map((image) => ({
+    src: image.src,
+    alt: image.alt,
+    caption: image.label,
+  })),
+  'portada',
+);
+---
+
+<section id="inicio" class="hero" aria-labelledby="hero-title">
+  <div class="shell hero__inner">
+    <header class="hero__intro">
+      <p class="eyebrow">El Lienzo · San Juan del Río, Querétaro</p>
+
+      <h1 id="hero-title" class="hero__title">Espacios para <em>celebrar</em></h1>
+    </header>
+
+    <div class="hero__media">
+      <figure class="hero__lead-figure">
+        <button class="zoom" type="button" disabled {...zoomLead}>
+          <Image
+            class="hero__image hero__image--lead"
+            src={leadImage.src}
+            alt={leadImage.alt}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+            widths={[480, 800, 1400]}
+            sizes="(max-width: 63.99rem) calc(100vw - 2rem), 48vw"
+          />
+          <span class="sr-only"> (ampliar)</span>
+        </button>
+      </figure>
+
+      <div class="hero__grid">
+        {
+          zoomSupport.map(({ photo, zoom }) => (
+            <div class="hero__thumb">
+              <span class="hero__thumb-frame">
+                <button class="zoom" type="button" disabled {...zoom}>
+                  <Image
+                    class="hero__image"
+                    src={photo.src}
+                    alt={photo.alt}
+                    loading="lazy"
+                    decoding="async"
+                    widths={[200, 320, 480]}
+                    sizes="(max-width: 47.99rem) calc((100vw - 2.75rem) / 2), (max-width: 63.99rem) calc((100vw - 4.25rem) / 4), 12vw"
+                  />
+                  <span class="sr-only"> (ampliar)</span>
+                </button>
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="hero__story">
+      <p class="prose hero__lead">
+        El Lienzo nació entre caballos, campo y tradición. Lo que alguna vez fue un lienzo charro
+        campestre hoy se transforma en un espacio abierto a nuevas historias.
+      </p>
+
+      <p class="prose hero__text">
+        Conservamos la esencia de aquel lugar y lo abrimos a nuevas visiones y posibilidades. Aquí,
+        cada celebración puede tomar una forma auténtica y memorable.
+      </p>
+
+      <div class="button-row hero__actions">
+        <a class="button button--primary" href={visitUrl} target="_blank" rel="noreferrer">
+          Agendar visita
+        </a>
+        <a class="button button--secondary" href="#cotiza">Cotizar mi evento</a>
+      </div>
+
+      <a class="hero__cue" href="#espacios">Conoce los espacios</a>
+    </div>
+  </div>
+</section>

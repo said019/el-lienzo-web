@@ -1,0 +1,126 @@
+---
+import "@fontsource-variable/playfair-display";
+import "@fontsource-variable/playfair-display/wght-italic.css";
+import "@fontsource-variable/montserrat";
+import "../styles/global.css";
+import "../styles/motion.css";
+import "../styles/site.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noIndex?: boolean;
+}
+
+const {
+  title = "El Lienzo | Espacios para eventos en San Juan del Río",
+  description = "Descubre Terrazas, Establos, Salón y Ruedo para celebraciones y eventos en San Juan del Río, Querétaro. Cotiza tu evento por WhatsApp.",
+  image,
+  noIndex = false,
+} = Astro.props;
+
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const shareImage = image
+  ? Astro.site
+    ? new URL(image, Astro.site).href
+    : image
+  : undefined;
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "EventVenue",
+  name: "El Lienzo",
+  description,
+  telephone: "+52 427 103 2890",
+  email: "contacto@ellienzo.com.mx",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Antiguo Camino a Ojo de Agua 6",
+    postalCode: "76807",
+    addressLocality: "San Juan del Río",
+    addressRegion: "Querétaro",
+    addressCountry: "MX",
+  },
+  hasMap: "https://maps.app.goo.gl/5SL2z6c4k6g5KhqJ6",
+  sameAs: [
+    "https://www.instagram.com/ellienzo.eventos/",
+    "https://www.facebook.com/profile.php?id=61572220612187&locale=es_ES",
+  ],
+};
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#34353f" />
+    <meta name="application-name" content="El Lienzo" />
+    <meta name="apple-mobile-web-app-title" content="El Lienzo" />
+    <meta name="msapplication-TileColor" content="#34353f" />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="description" content={description} />
+    <meta name="format-detection" content="telephone=no" />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="El Lienzo" />
+    {canonical && <meta property="og:url" content={canonical.href} />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {shareImage && <meta property="og:image" content={shareImage} />}
+    <meta name="twitter:card" content={shareImage ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {shareImage && <meta name="twitter:image" content={shareImage} />}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <noscript>
+      <style>
+        [data-reveal] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+
+    <script is:inline>
+      const reveal = () => {
+        const targets = document.querySelectorAll("[data-reveal]");
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          targets.forEach((target) => target.classList.add("is-visible"));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -8%", threshold: 0.12 },
+        );
+
+        targets.forEach((target) => observer.observe(target));
+      };
+
+      document.addEventListener("astro:page-load", reveal);
+      reveal();
+    </script>
+  </body>
+</html>

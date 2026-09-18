@@ -1,0 +1,51 @@
+---
+interface Props {
+  label?: string;
+  closeLabel?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+}
+
+const {
+  label = "Imagen ampliada",
+  closeLabel = "Cerrar imagen ampliada",
+  previousLabel = "Imagen anterior",
+  nextLabel = "Imagen siguiente",
+} = Astro.props;
+---
+
+<dialog class="lightbox" data-lightbox aria-label={label}>
+  <figure class="lightbox__figure">
+    <img class="lightbox__image" data-lightbox-image alt="" decoding="async" />
+
+    <figcaption class="lightbox__bar">
+      <span class="lightbox__caption" data-lightbox-caption hidden></span>
+      <span class="lightbox__counter" data-lightbox-counter aria-live="polite" hidden></span>
+    </figcaption>
+  </figure>
+
+  <button class="lightbox__control lightbox__control--close" type="button" aria-label={closeLabel} data-lightbox-close>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M6 6 18 18M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <button class="lightbox__control lightbox__control--prev" type="button" aria-label={previousLabel} data-lightbox-prev hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M15 5 8 12l7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <button class="lightbox__control lightbox__control--next" type="button" aria-label={nextLabel} data-lightbox-next hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+</dialog>
+
+<script>
+  import { initLightbox } from "../../scripts/lightbox";
+
+  initLightbox();
+  document.addEventListener("astro:page-load", () => initLightbox());
+</script>

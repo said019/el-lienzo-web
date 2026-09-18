@@ -1,0 +1,475 @@
+/* ==========================================================================
+   Cabecera y pie · sistema editorial claro
+   Playfair Display para la voz editorial, Montserrat para la funcional.
+   ========================================================================== */
+
+/* La barra es fija: reservamos su alto para que las anclas no queden debajo. */
+html {
+  scroll-padding-top: 6.5rem;
+}
+
+/* ------------------------------- Cabecera ------------------------------- */
+
+.site-header {
+  /* Alto de la barra; lo heredan el inner y el panel móvil. */
+  --header-height: 5rem;
+
+  position: fixed;
+  z-index: var(--z-sticky);
+  inset: 0 0 auto;
+  padding-top: env(safe-area-inset-top);
+  border-bottom: 0.0625rem solid var(--color-line);
+  background-color: var(--color-canvas);
+  background-color: color-mix(in srgb, var(--color-canvas) 90%, transparent);
+  color: var(--color-ink-deep);
+  transition:
+    background-color var(--duration-state) var(--ease-out-quart),
+    border-color var(--duration-state) var(--ease-out-quart);
+}
+
+/* Al hacer scroll la barra se compacta y se vuelve opaca. */
+.site-header.is-scrolled {
+  --header-height: 4.25rem;
+
+  border-bottom-color: var(--color-line-strong);
+  background-color: var(--color-canvas);
+}
+
+body:has(.site-header__menu[open]) {
+  overflow: hidden;
+}
+
+.site-header__inner {
+  display: grid;
+  width: var(--shell);
+  min-height: var(--header-height);
+  align-items: center;
+  margin-inline: auto;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--space-sm);
+  transition: min-height var(--duration-state) var(--ease-out-quart);
+}
+
+.site-header__brand {
+  position: relative;
+  z-index: 3;
+  display: inline-grid;
+  width: 2.9rem;
+  min-height: 3rem;
+  align-items: center;
+  justify-self: start;
+}
+
+.site-header__logo {
+  width: 100%;
+  height: auto;
+}
+
+.site-header__nav,
+.site-header__cta {
+  display: none;
+}
+
+.site-header__nav-list {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  gap: clamp(1.25rem, 2.6vw, 2.5rem);
+}
+
+.site-header__nav-item {
+  list-style: none;
+}
+
+.site-header__nav-link {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  border-bottom: 0.0625rem solid transparent;
+  color: var(--color-ink-soft);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition:
+    color var(--duration-fast) var(--ease-out-quart),
+    border-color var(--duration-fast) var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .site-header__nav-link:hover {
+    border-bottom-color: var(--color-accent);
+    color: var(--color-ink-deep);
+  }
+}
+
+/* --------------------------- Menú de pantalla --------------------------- */
+
+.site-header__menu {
+  position: relative;
+  z-index: 3;
+  grid-column: 3;
+  justify-self: end;
+}
+
+.site-header__menu summary {
+  list-style: none;
+}
+
+.site-header__menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.site-header__menu-trigger {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  min-width: 6rem;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  border: 0.09375rem solid var(--color-ink-deep);
+  border-radius: var(--radius-button);
+  padding: 0.7rem 0.95rem;
+  color: var(--color-ink-deep);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.site-header__menu-icon,
+.site-header__menu-icon::before,
+.site-header__menu-icon::after {
+  display: block;
+  width: 1.15rem;
+  height: 0.0625rem;
+  background: currentcolor;
+  content: "";
+  transition: transform var(--duration-state) var(--ease-out-quart);
+}
+
+.site-header__menu-icon {
+  position: relative;
+}
+
+.site-header__menu-icon::before,
+.site-header__menu-icon::after {
+  position: absolute;
+  inset-inline-start: 0;
+}
+
+.site-header__menu-icon::before {
+  transform: translateY(-0.3rem);
+}
+
+.site-header__menu-icon::after {
+  transform: translateY(0.3rem);
+}
+
+.site-header__menu[open] .site-header__menu-icon {
+  background: transparent;
+}
+
+.site-header__menu[open] .site-header__menu-icon::before {
+  transform: rotate(45deg);
+}
+
+.site-header__menu[open] .site-header__menu-icon::after {
+  transform: rotate(-45deg);
+}
+
+.site-header__menu-panel {
+  position: fixed;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  gap: var(--space-2xl);
+  padding:
+    calc(var(--header-height) + env(safe-area-inset-top) + var(--space-2xl))
+    max(1.5rem, env(safe-area-inset-right))
+    max(2.5rem, env(safe-area-inset-bottom))
+    max(1.5rem, env(safe-area-inset-left));
+  background: var(--color-canvas);
+}
+
+.site-header__menu:not([open]) .site-header__menu-panel {
+  display: none;
+}
+
+.site-header__menu-list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  border-top: 0.0625rem solid var(--color-line);
+}
+
+.site-header__menu-item {
+  display: grid;
+  align-items: baseline;
+  border-bottom: 0.0625rem solid var(--color-line);
+  padding-block: var(--space-md);
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  column-gap: var(--space-sm);
+}
+
+.site-header__menu-item .index-number {
+  /* El faint del token no alcanza AA sobre el lienzo: subimos un paso de tinta. */
+  color: var(--color-ink-soft);
+  font-size: var(--text-sm);
+}
+
+.site-header__menu-item a {
+  display: block;
+  min-height: 3rem;
+  color: var(--color-ink-deep);
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 10vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+.site-header__menu-note {
+  margin: 0;
+  color: var(--color-ink-soft);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (min-width: 40rem) {
+  .site-header__menu-cta {
+    justify-self: start;
+  }
+}
+
+/* Escritorio: navegación visible, el menú de pantalla desaparece. */
+@media (min-width: 72rem) {
+  .site-header {
+    --header-height: 6rem;
+  }
+
+  .site-header.is-scrolled {
+    --header-height: 4.75rem;
+  }
+
+  .site-header__inner {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+  }
+
+  .site-header__brand {
+    /* El logo es más alto que ancho: 3.1rem lo deja holgado en la barra compacta. */
+    width: 3.1rem;
+  }
+
+  .site-header__nav {
+    display: block;
+    justify-self: center;
+  }
+
+  .site-header__cta {
+    display: inline-flex;
+    justify-self: end;
+  }
+
+  .site-header__menu {
+    display: none;
+  }
+}
+
+/* ---------------------------------- Pie --------------------------------- */
+
+.site-footer {
+  border-top: 0.0625rem solid var(--color-line);
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
+
+.site-footer__media {
+  position: relative;
+  height: clamp(16rem, 40vw, 32rem);
+  margin: 0;
+  overflow: hidden;
+}
+
+.site-footer__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 55%;
+}
+
+/* Chip sólido sobre la foto: garantiza contraste sin depender de la imagen. */
+.site-footer__instagram {
+  position: absolute;
+  inset: auto auto clamp(1rem, 4vw, 2.5rem) clamp(1rem, 4vw, 2.5rem);
+  display: inline-flex;
+  max-width: calc(100% - 2rem);
+  min-height: 3rem;
+  align-items: center;
+  border-radius: var(--radius-button);
+  padding: 0.85rem 1.35rem;
+  background: var(--color-ink-deep);
+  color: var(--color-paper);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  overflow-wrap: anywhere;
+  text-decoration: none;
+  transition: background-color var(--duration-state) var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .site-footer__instagram:hover {
+    background: var(--color-accent-deep);
+  }
+}
+
+.site-footer__main,
+.site-footer__legal {
+  width: var(--shell);
+  margin-inline: auto;
+}
+
+.site-footer__main {
+  display: grid;
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.site-footer__identity {
+  display: grid;
+  min-width: 0;
+  /* El cliente quiere el logo y el eslogan centrados en su área. */
+  justify-items: center;
+  align-self: center;
+  text-align: center;
+}
+
+.site-footer__brand {
+  display: block;
+  width: clamp(7rem, 16vw, 9.5rem);
+}
+
+.site-footer__logo {
+  width: 100%;
+  height: auto;
+}
+
+.site-footer__tagline {
+  margin: var(--space-lg) 0 0;
+  color: var(--color-ink-deep);
+  font-family: var(--font-editorial);
+  font-size: var(--text-heading);
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.site-footer__contact {
+  min-width: 0;
+  max-width: 40rem;
+  font-style: normal;
+}
+
+.site-footer__heading {
+  margin: 0 0 var(--space-md);
+  color: var(--color-ink-soft);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.site-footer__contact-list {
+  margin: 0;
+  padding: 0;
+  border-top: 0.0625rem solid var(--color-line);
+}
+
+.site-footer__contact-item {
+  display: grid;
+  border-bottom: 0.0625rem solid var(--color-line);
+  padding-block: var(--space-md);
+  gap: var(--space-2xs);
+  list-style: none;
+}
+
+.site-footer__contact-label {
+  color: var(--color-ink-soft);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+
+.site-footer__contact-link {
+  min-height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-ink-deep);
+  overflow-wrap: anywhere;
+  text-decoration-color: var(--color-line-strong);
+  text-underline-offset: 0.25em;
+  transition: color var(--duration-fast) var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .site-footer__contact-link:hover {
+    color: var(--color-accent-deep);
+    text-decoration-color: currentcolor;
+  }
+}
+
+.site-footer__legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-top: 0.0625rem solid var(--color-line);
+  padding-block: var(--space-lg);
+  color: var(--color-ink-soft);
+  font-size: var(--text-xs);
+  gap: var(--space-sm) var(--space-xl);
+}
+
+.site-footer__legal p {
+  margin: 0;
+}
+
+@media (min-width: 62rem) {
+  .site-footer__main {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+  }
+
+  .site-footer__contact {
+    border-left: 0.0625rem solid var(--color-line);
+    padding-left: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .site-footer__contact-item {
+    align-items: baseline;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: var(--space-md);
+  }
+}
+
+@media (max-width: 47.99rem) {
+  /* Deja aire bajo el aviso legal para el acceso flotante a WhatsApp. */
+  .site-footer__legal {
+    display: grid;
+    padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+  }
+}

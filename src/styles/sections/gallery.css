@@ -1,0 +1,102 @@
+/*
+  Galería · cierre ligero de la página.
+  Es una "mini galería": una tira de cuatro fotos con proporción fija, sin
+  carrusel ni tarjetas. La portada ya carga la fotografía grande, así que aquí
+  el peso visual baja: menos aire vertical que una sección normal, título en
+  escala media y un filete que separa el encabezado de la tira.
+*/
+
+.gallery {
+  padding-block: clamp(var(--space-3xl), 7vw, 6.5rem);
+  scroll-margin-top: 5.5rem;
+}
+
+.gallery__header {
+  display: grid;
+  gap: var(--space-lg);
+  align-items: end;
+}
+
+.gallery__intro {
+  min-width: 0;
+}
+
+.gallery__intro .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+/* Más chico que un título de sección: esto es un cierre, no el plato fuerte. */
+.gallery__title {
+  max-width: 16ch;
+  margin-bottom: 0;
+  font-size: var(--text-heading);
+}
+
+.gallery__action {
+  justify-self: start;
+}
+
+.gallery__rule {
+  margin-block: clamp(var(--space-xl), 4vw, var(--space-2xl)) var(--space-xl);
+}
+
+.gallery__strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(var(--space-xs), 1.4vw, var(--space-md));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gallery__item {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.gallery__image {
+  width: 100%;
+  height: auto;
+  /* Proporción fija para que la tira quede pareja aunque las fotos varíen. */
+  aspect-ratio: 3 / 4;
+  background: var(--color-sand);
+  object-fit: cover;
+  transition: transform var(--duration-layout) var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .gallery__item:hover .gallery__image {
+    transform: scale(1.03);
+  }
+}
+
+.gallery__note {
+  max-width: 54ch;
+  margin: var(--space-lg) 0 0;
+}
+
+@media (min-width: 48rem) {
+  .gallery__header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-xl);
+  }
+
+  .gallery__action {
+    justify-self: end;
+  }
+
+  /* Tira completa: las cuatro fotos en una sola línea. */
+  .gallery__strip {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery__image {
+    transition: none;
+  }
+
+  .gallery__item:hover .gallery__image {
+    transform: none;
+  }
+}

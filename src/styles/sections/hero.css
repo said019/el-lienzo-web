@@ -1,0 +1,174 @@
+/*
+  Portada · hero claro. El texto vive sobre el lienzo claro, nunca encima de la
+  foto: a la izquierda el slogan y la historia, a la derecha la composición
+  fotográfica (una imagen principal y cuatro complementarias).
+*/
+
+.hero {
+  background: var(--color-canvas);
+  /* El bloque superior deja aire suficiente para el encabezado fijo. */
+  padding-block: clamp(7rem, 15vw, 10.5rem) clamp(3rem, 8vw, 5.5rem);
+}
+
+.hero__inner {
+  display: grid;
+  gap: clamp(2.5rem, 7vw, 3.5rem);
+  align-items: center;
+  grid-template-areas:
+    "intro"
+    "media"
+    "story";
+}
+
+/* ------------------------------- Texto ------------------------------- */
+
+.hero__intro {
+  grid-area: intro;
+  max-width: 40rem;
+}
+
+.hero .eyebrow {
+  margin-bottom: var(--space-md);
+}
+
+.hero__title {
+  max-width: 12ch;
+  margin: 0;
+  font-size: var(--text-display);
+  line-height: 0.95;
+}
+
+.hero__story {
+  grid-area: story;
+  max-width: 40rem;
+}
+
+.hero__lead {
+  margin: 0 0 var(--space-md);
+}
+
+.hero__text {
+  margin: 0 0 var(--space-xl);
+}
+
+.hero__actions {
+  margin-bottom: var(--space-xl);
+}
+
+/* Pista de scroll discreta: filete en vez de subrayado, con flecha de 0.45rem. */
+.hero__cue {
+  display: inline-flex;
+  max-width: 100%;
+  min-height: 3rem;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
+  border-top: 0.0625rem solid var(--color-line);
+  padding-top: var(--space-md);
+  color: var(--color-ink-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-label);
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color var(--duration-state) var(--ease-out-quart);
+}
+
+.hero__cue::after {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-right: 0.09375rem solid currentColor;
+  border-bottom: 0.09375rem solid currentColor;
+  content: "";
+  rotate: 45deg;
+  translate: 0 -0.14rem;
+  transition: translate var(--duration-state) var(--ease-out-quart);
+}
+
+@media (hover: hover) {
+  .hero__cue:hover {
+    color: var(--color-accent-deep);
+  }
+
+  .hero__cue:hover::after {
+    translate: 0 0.08rem;
+  }
+}
+
+/* ----------------------------- Fotografía ----------------------------- */
+
+.hero__media {
+  display: grid;
+  grid-area: media;
+  gap: var(--space-sm);
+}
+
+.hero__lead-figure {
+  margin: 0;
+  /* Vertical en móvil: es una foto de formato retrato y así no se recorta. */
+  aspect-ratio: 4 / 5;
+}
+
+.hero__grid {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.hero__thumb {
+  margin: 0;
+}
+
+.hero__thumb-frame {
+  display: block;
+  aspect-ratio: 1 / 1;
+}
+
+.hero__image {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  /* Color de reserva mientras carga: evita el destello blanco. */
+  background: var(--color-sand);
+  object-fit: cover;
+}
+
+.hero__image--lead {
+  object-position: 50% 45%;
+}
+
+
+/* ----------------------------- Adaptación ----------------------------- */
+
+@media (min-width: 48rem) {
+  .hero__lead-figure {
+    aspect-ratio: 5 / 4;
+  }
+
+  .hero__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .hero__inner {
+    column-gap: clamp(3rem, 5vw, 5rem);
+    row-gap: var(--space-lg);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-areas:
+      "intro media"
+      "story media";
+  }
+
+  .hero__intro,
+  .hero__story {
+    max-width: 34rem;
+  }
+
+  .hero__media {
+    align-self: center;
+    grid-row: 1 / span 2;
+  }
+}

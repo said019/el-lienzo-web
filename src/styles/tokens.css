@@ -1,0 +1,104 @@
+/*
+  El Lienzo · sistema editorial claro
+  Playfair Display para la voz editorial, Montserrat para la voz funcional.
+  Paleta clara tomada del mailing "Espacios para celebrar" aprobado por el cliente.
+*/
+:root {
+  color-scheme: light;
+
+  /* Tinta */
+  --color-ink-deep: #16211d;
+  --color-ink: #1f2b26;
+  --color-ink-soft: #525d59;
+  /* Mínimo que cumple 4.5:1 sobre arena (#f3efe6), la superficie clara más oscura. */
+  --color-ink-faint: #646e69;
+
+  /* Superficies claras */
+  --color-paper: #ffffff;
+  --color-canvas: #fcfbf8;
+  --color-sand: #f3efe6;
+  --color-sand-deep: #eae4d7;
+
+  /* Acento: el azul pizarra del botón del mailing */
+  --color-accent: #5f747c;
+  --color-accent-deep: #4b5f66;
+  --color-accent-soft: #e4eaec;
+
+  /* Líneas */
+  --color-line: #ded8cb;
+  --color-line-strong: #c4bcab;
+  --color-line-dark: rgb(255 255 255 / 24%);
+
+  /* Semánticos */
+  --color-error: #a3341f;
+  --color-error-surface: #fbeeea;
+  --color-success: #2f6b4a;
+  --color-success-surface: #ecf5ef;
+  --color-overlay: rgb(22 33 29 / 62%);
+
+  /* Alias heredados: mantienen viva la CSS anterior mientras se migra */
+  --color-terracotta: var(--color-accent);
+  --color-terracotta-deep: var(--color-accent-deep);
+  --color-terracotta-soft: var(--color-accent-soft);
+  --color-garden: var(--color-ink-deep);
+  --color-candle: var(--color-sand-deep);
+
+  --shadow-modal: 0 1.5rem 5rem rgb(22 33 29 / 24%);
+  --shadow-card: 0 0.75rem 2.5rem rgb(22 33 29 / 7%);
+
+  /* Tipografía */
+  --font-display: "Playfair Display Variable", "Playfair Display", Georgia,
+    "Times New Roman", serif;
+  --font-body: "Montserrat Variable", Montserrat, "Segoe UI", system-ui, sans-serif;
+  --font-editorial: var(--font-display);
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1.05rem, 1.4vw, 1.3rem);
+  --text-heading: clamp(1.5rem, 2.4vw, 2.25rem);
+  --text-title: clamp(2.25rem, 4.6vw, 4rem);
+  --text-display: clamp(2.9rem, 7vw, 6.25rem);
+
+  --tracking-label: 0.22em;
+  --tracking-display: -0.02em;
+
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+  --space-5xl: 8rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-button: 0.5rem;
+
+  --shell: min(78rem, calc(100% - clamp(2rem, 7vw, 7rem)));
+  --measure: 62ch;
+
+  --duration-fast: 140ms;
+  --duration-state: 260ms;
+  --duration-layout: 420ms;
+  --duration-entrance: 680ms;
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+
+  --z-sticky: 20;
+  --z-backdrop: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --text-body: 1.0625rem;
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "el-lienzo-web",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "node dist/server/entry.mjs",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:all": "npm run check && npm run test && npm run build && npm run test:e2e"
+  },
+  "dependencies": {
+    "@astrojs/node": "^11.1.5",
+    "@fontsource-variable/albert-sans": "5.3.0",
+    "@fontsource-variable/darker-grotesque": "5.3.0",
+    "@fontsource-variable/montserrat": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
+    "astro": "7.2.9",
+    "serve": "14.2.6",
+    "sharp": "0.35.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.10",
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.62.1",
+    "@types/node": "^26.4.0",
+    "typescript": "6.0.3",
+    "vitest": "4.1.11"
+  }
+}

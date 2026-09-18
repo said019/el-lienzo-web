@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+playwright-report/
+test-results/
+coverage/
+data/promotion-images/
+.env
+.env.*
+!.env.example
