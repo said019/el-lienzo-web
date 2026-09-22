@@ -8,7 +8,7 @@ import fachadaEdificio from '../../assets/gallery/fachada-edificio.webp';
 
 const INSTAGRAM_URL = 'https://www.instagram.com/ellienzo.eventos/';
 
-// Selección corta y distinta a la de la portada: una foto del jardín y tres montajes.
+// Selección de la guía: dos montajes, mesas en el jardín y la fachada.
 const shots = [
   {
     src: montajeRosa,
@@ -63,7 +63,8 @@ const zoomShots = await buildZoomGroup(shots, 'galeria');
                 alt={photo.alt}
                 loading="lazy"
                 decoding="async"
-                widths={[300, 480, 640]}
+                widths={[300, 480, 640, 900, 1080].filter((width) => width <= photo.src.width)}
+                quality={88}
                 sizes="(max-width: 47.99rem) calc(50vw - 1.5rem), (max-width: 63.99rem) calc(25vw - 1.5rem), 18.5rem"
               />
               <span class="sr-only"> (ampliar)</span>
