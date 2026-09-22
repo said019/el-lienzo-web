@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logoElLienzo from '../../assets/brand/logo-el-lienzo.png';
-import footerVenue from '../../assets/spaces/jardin-andador.webp';
+import footerVenue from '../../assets/gallery/jardines-general.webp';
 
 const currentYear = new Date().getFullYear();
 ---
@@ -11,10 +11,10 @@ const currentYear = new Date().getFullYear();
     <Image
       class="site-footer__image"
       src={footerVenue}
-      alt="Vista de los jardines de El Lienzo de día, con el andador de piedra y las palmeras"
+      alt="Panorámica de los jardines de El Lienzo con palmeras, el ruedo y la terraza de piedra"
       loading="lazy"
       decoding="async"
-      widths={[583]}
+      widths={[640, 960, 1440]}
       sizes="100vw"
     />
     <a
