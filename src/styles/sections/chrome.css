@@ -448,6 +448,17 @@ body:has(.site-header__menu[open]) {
   margin: 0;
 }
 
+.site-footer__privacy {
+  flex: 1 1 30rem;
+  max-width: 65ch;
+}
+
+.site-footer__privacy-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 @media (min-width: 62rem) {
   .site-footer__main {
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
