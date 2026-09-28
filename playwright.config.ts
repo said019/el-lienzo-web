@@ -30,7 +30,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run dev -- --host 127.0.0.1 --port ${port}`,
+    command: process.env.E2E_PRODUCTION
+      ? `HOST=127.0.0.1 PORT=${port} npm start`
+      : `npm run dev -- --host 127.0.0.1 --port ${port}`,
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

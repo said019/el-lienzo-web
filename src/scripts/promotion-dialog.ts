@@ -136,14 +136,30 @@ function readingProgress(): number {
   return Math.max(0, Math.min(100, (window.scrollY / scrollable) * 100));
 }
 
-function setupPromotionRoot(root: HTMLElement): void {
+async function setupPromotionRoot(root: HTMLElement): Promise<void> {
   if (root.dataset.promotionInitialized === "true") return;
   root.dataset.promotionInitialized = "true";
 
   const dialog = root.querySelector<HTMLDialogElement>(
     "dialog[data-promotion-dialog]",
   );
-  const promotion = selectActivePromotion(readPromotions(root));
+  let promotions = readPromotions(root);
+  if (root.dataset.promotionSource) {
+    try {
+      const response = await fetch(root.dataset.promotionSource, {
+        cache: "no-store",
+        signal: AbortSignal.timeout(8000),
+      });
+      if (!response.ok) throw new Error("Promotions unavailable");
+      const value: unknown = await response.json();
+      promotions = Array.isArray(value) ? value.filter(isPromotion) : [];
+    } catch {
+      root.dataset.promotionState = "unavailable";
+      return;
+    }
+  }
+  if (!root.isConnected) return;
+  const promotion = selectActivePromotion(promotions);
   const storage = getSessionStorage();
 
   if (!dialog || !promotion) {

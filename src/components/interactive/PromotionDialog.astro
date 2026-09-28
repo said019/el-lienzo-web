@@ -1,6 +1,5 @@
 ---
 import type { Promotion } from "../../lib/promotions";
-import { readPromotionStore } from "../../lib/promotion-store";
 
 interface Props {
   promotions?: readonly Promotion[];
@@ -9,10 +8,8 @@ interface Props {
   closeLabel?: string;
 }
 
-const storedPromotions: Promotion[] = await readPromotionStore();
-
 const {
-  promotions = storedPromotions,
+  promotions = [],
   id = "promocion-el-lienzo",
   class: className,
   closeLabel = "Cerrar promoción",
@@ -26,6 +23,7 @@ const serializedPromotions = JSON.stringify(promotions).replace(/</g, "\\u003c")
 <div
   class:list={["promotion", className]}
   data-promotion-root
+  data-promotion-source={Astro.props.promotions === undefined ? '/api/public-promotions' : undefined}
   data-promotion-state="loading"
 >
   <dialog

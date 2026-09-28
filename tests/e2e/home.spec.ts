@@ -14,7 +14,7 @@ async function suppressPromotion(page: Page): Promise<void> {
  */
 async function armPromotionForScroll(page: Page): Promise<void> {
   await page.route("**/*", async (route) => {
-    if (route.request().resourceType() !== "document") {
+    if (!route.request().url().includes('/api/public-promotions')) {
       await route.continue();
       return;
     }
